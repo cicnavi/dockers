@@ -27,6 +27,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
 	&& pecl install xdebug \
 	&& pecl install redis \
 	&& docker-php-ext-enable xdebug redis \
+    && apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 	
 # Install composer
