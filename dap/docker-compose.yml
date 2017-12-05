@@ -1,0 +1,45 @@
+version: '2'
+services:
+    71.dap.dev:
+        image: cicnavi/dap:7.1
+        container_name: 71.dap.dev
+        restart: unless-stopped
+        ports:
+        - "8071:80" # web
+        volumes:
+#            - ~/.composer:/root/.composer # Use for composer caching
+#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+#            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
+            - "./7.1/src:/var/www/src" # Directory for all apps, change local path as needed.
+            - "./7.1/html:/var/www/html" # Public directory, change local path as needed.
+        links:
+            - mysql.dap.dev
+    
+    56.dap.dev:
+        image: cicnavi/dap:5.6
+        container_name: 56.dap.dev
+        restart: unless-stopped
+        ports:
+        - "8056:80" # web
+        volumes:
+#            - ~/.composer:/root/.composer # Use for composer caching
+#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+#            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
+            - "./5.6/src:/var/www/src" # Directory for all apps, change local path as needed.
+            - "./5.6/html:/var/www/html" # Public directory, change local path as needed.
+        links:
+            - mysql.dap.dev
+            
+    mysql.dap.dev:
+        image: mysql:5.7
+        container_name: mysql.dap.dev
+        restart: unless-stopped
+        ports:
+            - "33306:3306"
+        environment:
+# We can run MySQL without root password, or we can set it here.
+# Comment out one of the next two lines:    
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+#            MYSQL_ROOT_PASSWORD: changeMe
+        volumes:
+            - ~/volumes/mysql:/var/lib/mysql

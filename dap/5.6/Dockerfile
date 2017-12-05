@@ -1,11 +1,10 @@
-FROM php:7.1-apache-jessie
+FROM php:5.6-apache-jessie
 
 # Use default php.ini (it is development version).
 COPY php-config/php.ini /usr/local/etc/php/
 
 # Setup bare-minimum extra extensions for Laravel & others
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
-		libmemcached-dev  \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
@@ -20,15 +19,14 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
 		tar \
 		less \
 		curl \
-    && docker-php-ext-install -j$(nproc) bcmath mcrypt zip pdo pdo_mysql mysqli opcache \
+    && docker-php-ext-install -j$(nproc) bcmath mcrypt zip pdo pdo_mysql mysqli \
     && docker-php-ext-configure gd \
 		--with-freetype-dir=/usr/include/ \
 		--with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
-	&& pecl install memcached \
 	&& pecl install xdebug \
 	&& pecl install redis \
-	&& docker-php-ext-enable memcached xdebug redis \
+	&& docker-php-ext-enable xdebug redis \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 	
 # Install composer

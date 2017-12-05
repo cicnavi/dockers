@@ -1,0 +1,10 @@
+
+# Ignore...
+/*/html/*
+
+# ...except
+!/*/html/.htaccess
+!/*/html/index.php
+
+!.gitignore
+!README.md
