@@ -18,6 +18,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
 		wget \
 		tar \
 		less \
+		nano \
 		curl \
     && docker-php-ext-install -j$(nproc) bcmath mcrypt zip pdo pdo_mysql mysqli \
     && docker-php-ext-configure gd \
@@ -38,7 +39,14 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 # Enable mod_rewrite.
 RUN a2enmod rewrite
 
-# Set app dir and owner
+# Create required custom directories
+RUN mkdir -p /var/www/src /etc/apache2/config-from-host
+
+# Include optional Apache configuration from host.
+RUN echo "" >> /etc/apache2/apache2.conf \
+    && echo "# Include the configurations from the host machine" >> /etc/apache2/apache2.conf \
+    && echo "IncludeOptional config-from-host/*.conf" >> /etc/apache2/apache2.conf
+
+# Set permissions for Apache user and group
 RUN chown -R www-data:www-data /var/www/html \
-	&& mkdir -p /var/www/src \
 	&& chown -R www-data:www-data /var/www/src
