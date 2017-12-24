@@ -1,5 +1,21 @@
 version: '2'
 services:
+    72.dap.dev:
+        image: cicnavi/dap:7.2
+        container_name: 72.dap.dev
+        restart: unless-stopped
+        ports:
+        - "8072:80" # web
+        volumes:
+#            - ~/.composer:/root/.composer # Use for composer caching
+#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+#            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
+            - "./7.2/src:/var/www/src" # Directory for all apps, change local path as needed.
+            - "./7.2/html:/var/www/html" # Public directory, change local path as needed.
+            - "./7.2/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
+        links:
+            - mysql.dap.dev
+
     71.dap.dev:
         image: cicnavi/dap:7.1
         container_name: 71.dap.dev
