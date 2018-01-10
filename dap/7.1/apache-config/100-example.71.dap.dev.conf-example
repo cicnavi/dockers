@@ -21,16 +21,16 @@
 # match a ServerName or ServerAlias in any <VirtualHost> block.
 #
 #<VirtualHost *:80>
-#    ServerAdmin mivanci@srce.hr
-#    DocumentRoot "c:/Apache24/htdocs"
-#    ServerName pc-mivancic.srce.hr
-#    ServerAlias www.pc-mivancic.srce.hr
-#    ErrorLog "logs/pc-mivancic.srce.hr-error.log"
-#    CustomLog "logs/pc-mivancic.srce.hr-access.log" common
+#    ServerAdmin webmaster@example.com
+#    DocumentRoot "/var/www/html"
+#    ServerName example.com
+#    ServerAlias www.example.com
+#    ErrorLog "logs/example.com-error.log"
+#    CustomLog "logs/example.com-access.log" common
 #	
 #	DirectoryIndex index.html index.php
 #	
-#	<Directory "c:/Apache24/htdocs/">
+#	<Directory "/var/www/html/">
 #		Options Indexes FollowSymLinks MultiViews
 #		AllowOverride All
 #		Require all granted
@@ -39,8 +39,23 @@
 
 #<VirtualHost *:80>
 #    ServerAdmin webmaster@dummy-host2.example.com
-#    DocumentRoot "c:/Apache24/docs/dummy-host2.example.com"
+#    DocumentRoot "/var/www/src/dummy-host2.example.com"
 #    ServerName dummy-host2.example.com
 #    ErrorLog "logs/dummy-host2.example.com-error.log"
 #    CustomLog "logs/dummy-host2.example.com-access.log" common
+#</VirtualHost>
+
+# Real example that I've used on my dev machine:
+#<VirtualHost *:80>
+#    ServerAdmin mivanci@srce.hr
+#    DocumentRoot "/var/www/src/hosting.eduroam.hr/public"
+#    ServerName hosting.eduroam.71.dap.dev
+#    ErrorLog "${APACHE_LOG_DIR}/hosting.eduroam.71.dap.dev-error.log"
+#    CustomLog "${APACHE_LOG_DIR}/hosting.eduroam.71.dap.dev-access.log" common
+#	
+#	<Directory "/var/www/src/hosting.eduroam.hr/public/">
+#		Options Indexes FollowSymLinks MultiViews
+#		AllowOverride All
+#		Require all granted
+#	</Directory>
 #</VirtualHost>

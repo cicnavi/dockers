@@ -23,7 +23,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 		nano \
 		curl \
 		apt-utils\
-	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache \
+	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache intl \
 	&& docker-php-ext-configure gd \
 		--with-freetype-dir=/usr/include/ \
 		--with-jpeg-dir=/usr/include/ \
