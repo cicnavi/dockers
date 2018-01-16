@@ -52,5 +52,9 @@ RUN echo "" >> /etc/apache2/apache2.conf \
     && echo "IncludeOptional config-from-host/*.conf" >> /etc/apache2/apache2.conf
 
 # Set permissions for Apache user and group
-RUN chown -R www-data:www-data /var/www/html \
-	&& chown -R www-data:www-data /var/www/src
+#RUN chown -R www-data:www-data /var/www/html \
+#	&& chown -R www-data:www-data /var/www/src
+
+# Change uid and gid of apache to docker user uid/gid 
+RUN usermod -u 1000 www-data \
+    && groupmod -g 1000 www-data
