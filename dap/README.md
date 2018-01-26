@@ -5,7 +5,7 @@ Each folder means specific PHP version.
 
 To run a container:
 
-In powershell, navigate to specific folder and then run:
+In shell, navigate to specific folder and then run:
 
 ```bash
 docker run --name test -v $PWD/src:/var/www/src -v $PWD/html:/var/www/html -p 8080:80 cicnavi/dap:7.1
@@ -13,7 +13,7 @@ docker run --name test -v $PWD/src:/var/www/src -v $PWD/html:/var/www/html -p 80
 
 For convinient access, in hosts file add, for example:
 
-127.0.0.10 web71.dev
+127.0.0.10 71.dap.localhost
 
 For Windows OS, we can also forward specific ports:
 ```bash
