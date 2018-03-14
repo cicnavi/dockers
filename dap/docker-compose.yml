@@ -1,8 +1,8 @@
 version: '2'
 services:
-    72.dap.localhost:
+    72.dap.test:
         image: cicnavi/dap:7.2
-        container_name: 72.dap.localhost
+        container_name: 72.dap.test
         restart: unless-stopped
         ports:
         - "8072:80" # web
@@ -14,11 +14,11 @@ services:
             - "./7.2/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.2/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
         links:
-            - mysql.dap.localhost
+            - mysql.dap.test
 
-    71.dap.localhost:
+    71.dap.test:
         image: cicnavi/dap:7.1
-        container_name: 71.dap.localhost
+        container_name: 71.dap.test
         restart: unless-stopped
         ports:
         - "8071:80" # web
@@ -30,11 +30,11 @@ services:
             - "./7.1/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.1/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
         links:
-            - mysql.dap.localhost
+            - mysql.dap.test
     
-    56.dap.localhost:
+    56.dap.test:
         image: cicnavi/dap:5.6
-        container_name: 56.dap.localhost
+        container_name: 56.dap.test
         restart: unless-stopped
         ports:
         - "8056:80" # web
@@ -46,11 +46,11 @@ services:
             - "./5.6/html:/var/www/html" # Public directory, change local path as needed.
             - "./5.6/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
         links:
-            - mysql.dap.localhost
+            - mysql.dap.test
             
-    mysql.dap.localhost:
+    mysql.dap.test:
         image: mysql:5.7
-        container_name: mysql.dap.localhost
+        container_name: mysql.dap.test
         restart: unless-stopped
         ports:
             - "33306:3306"
