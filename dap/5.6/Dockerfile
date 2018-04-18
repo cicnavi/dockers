@@ -29,7 +29,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd \
 	&& docker-php-ext-configure intl \
 	&& docker-php-ext-install -j$(nproc) intl \
-	&& pecl install xdebug \
+	&& pecl install xdebug-2.5.5 \
 	&& pecl install redis \
 	&& docker-php-ext-enable xdebug redis \
     && apt-get clean \
