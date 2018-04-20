@@ -18,6 +18,7 @@ For convinient access, in hosts file add, for example:
 For Windows OS, we can also forward specific ports:
 ```bash
 netsh interface portproxy add v4tov4 listenport=80 listenaddress=127.0.0.10 connectport=8080 connectaddress=127.0.0.1
+Primjer za php 7: netsh interface portproxy add v4tov4 listenport=80 listenaddress=127.0.0.72 connectport=8072 connectaddress=127.0.0.1
 netsh interface portproxy show v4tov4
 ```
 
