@@ -11,7 +11,7 @@ To run containers you have to have Docker installed on your system.
 
 ## Available containers
 
-### DAP (Debian Apache PHP) containers
+### DAP (Debian Apache PHP) Containers
 
 DAP contaners are available with different PHP versions. Each folder in 'dap' folder coresponds to specific PHP version which is used in a container. So, with this approach we can easily run different contaners to test our web application on different PHP versions.
 
