@@ -78,4 +78,10 @@ netsh interface portproxy add v4tov4 listenport=80 listenaddress=127.0.0.72 conn
 ```
 Once we do that, we can enter the URL 'http://72.dap.test' and our request will be forwarded to our '72.dap.test' container. Great!
 
+To show all defined forwards:
+
+```shell
+netsh interface portproxy show v4tov4
+```
+
 If you know how to do this in different Linux distributions, let me know :). 

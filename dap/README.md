@@ -1,25 +1,20 @@
 
-# Debian, Apache, PHP
+# DAP (Debian, Apache, PHP) Containers
 
-Each folder means specific PHP version.
+Each folder specifies a Docker container with specific PHP version.
 
 To run a container:
 
 In shell, navigate to specific folder and then run:
 
-```bash
-docker run --name test -v $PWD/src:/var/www/src -v $PWD/html:/var/www/html -p 8080:80 cicnavi/dap:7.1
+```shell
+docker run --name test -v $PWD/src:/var/www/src -v $PWD/html:/var/www/html -p 8071:80 cicnavi/dap:7.1
 ```
 
-For convinient access, in hosts file add, for example:
+In 'dap' folder, there is a 'docker-compose.yml' file, which means you can run all defined containers with single command:
 
-127.0.0.10 71.dap.localhost
-
-For Windows OS, we can also forward specific ports:
-```bash
-netsh interface portproxy add v4tov4 listenport=80 listenaddress=127.0.0.10 connectport=8080 connectaddress=127.0.0.1
-Primjer za php 7: netsh interface portproxy add v4tov4 listenport=80 listenaddress=127.0.0.72 connectport=8072 connectaddress=127.0.0.1
-netsh interface portproxy show v4tov4
+```shell
+docker-compose up -d
 ```
 
-
+Once containers are up, in your browser use localhost URL with appropriate port, for example: http://localhos:8071
