@@ -31,6 +31,22 @@ services:
             - "./7.1/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
         links:
             - mysql.dap.test
+            
+    70.dap.test:
+        image: cicnavi/dap:7.0
+        container_name: 70.dap.test
+        restart: unless-stopped
+        ports:
+        - "8070:80" # web
+        volumes:
+#            - ~/.composer:/root/.composer # Use for composer caching
+#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+#            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
+            - "./7.0/src:/var/www/src" # Directory for all apps, change local path as needed.
+            - "./7.0/html:/var/www/html" # Public directory, change local path as needed.
+            - "./7.0/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
+        links:
+            - mysql.dap.test
     
     56.dap.test:
         image: cicnavi/dap:5.6
