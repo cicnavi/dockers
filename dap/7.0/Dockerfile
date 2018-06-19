@@ -1,15 +1,14 @@
-FROM php:7.0-apache
+FROM php:7.1-apache-jessie
 
 # Use default php.ini (it is development version).
 COPY php-config/php.ini /usr/local/etc/php/
 
 # Setup bare-minimum extra extensions for Laravel & others
-RUN DEBIAN_FRONTEND=noninteractive apt-get update \
-	&& apt-get install -y \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
 		libmemcached-dev  \
-		libfreetype6-dev \
-		libjpeg62-turbo-dev \
-		libpng-dev \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev \
 		zlib1g-dev \
 		libz-dev \
 		libpq-dev  \
@@ -17,28 +16,27 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 		g++ \
 		git \
 		zip \
-		libmcrypt-dev \
+        libmcrypt-dev \
 		bzip2 \
 		wget \
 		tar \
 		less \
 		nano \
 		curl \
-		apt-utils\
-	&& docker-php-ext-install -j$(nproc) bcmath mcrypt zip pdo pdo_mysql mysqli opcache \
-	&& docker-php-ext-configure gd \
+    && docker-php-ext-install -j$(nproc) bcmath mcrypt zip pdo pdo_mysql mysqli opcache \
+    && docker-php-ext-configure gd \
 		--with-freetype-dir=/usr/include/ \
 		--with-jpeg-dir=/usr/include/ \
-	&& docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install -j$(nproc) gd \
 	&& docker-php-ext-configure intl \
 	&& docker-php-ext-install -j$(nproc) intl \
-	&& pecl install xdebug-2.6.0 \
+	&& pecl install xdebug \
 	&& pecl install memcached \
 	&& pecl install redis \
 	&& docker-php-ext-enable xdebug memcached redis \
-	&& apt-get clean \
+    && apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
+	
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- \
 	--install-dir=/usr/local/bin \
@@ -52,8 +50,8 @@ RUN mkdir -p /var/www/src /etc/apache2/config-from-host
 
 # Include optional Apache configuration from host.
 RUN echo "" >> /etc/apache2/apache2.conf \
-	&& echo "# Include the configurations from the host machine" >> /etc/apache2/apache2.conf \
-	&& echo "IncludeOptional config-from-host/*.conf" >> /etc/apache2/apache2.conf
+    && echo "# Include the configurations from the host machine" >> /etc/apache2/apache2.conf \
+    && echo "IncludeOptional config-from-host/*.conf" >> /etc/apache2/apache2.conf
 
 # Set permissions for Apache user and group
 #RUN chown -R www-data:www-data /var/www/html \
