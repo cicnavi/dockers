@@ -1,4 +1,4 @@
-FROM php:7.0-apache
+FROM php:7.2-apache
 
 # Use default php.ini (it is development version).
 COPY php-config/php.ini /usr/local/etc/php/
