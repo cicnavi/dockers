@@ -45,7 +45,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 	--filename=composer
 
 # Enable Apache mod_rewrite.
-RUN a2enmod rewrite
+RUN a2enmod rewrite ssl headers
 
 # Create required custom directories
 RUN mkdir -p /var/www/src /etc/apache2/config-from-host

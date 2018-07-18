@@ -6,6 +6,7 @@ services:
         restart: unless-stopped
         ports:
         - "8072:80" # web
+        - "9072:443" # tls
         volumes:
 #            - ~/.composer:/root/.composer # Use for composer caching
 #            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
@@ -22,6 +23,7 @@ services:
         restart: unless-stopped
         ports:
         - "8071:80" # web
+        - "9071:443" # tls
         volumes:
 #            - ~/.composer:/root/.composer # Use for composer caching
 #            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
@@ -38,6 +40,7 @@ services:
         restart: unless-stopped
         ports:
         - "8070:80" # web
+        - "9070:443" # tls
         volumes:
 #            - ~/.composer:/root/.composer # Use for composer caching
 #            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
@@ -54,6 +57,7 @@ services:
         restart: unless-stopped
         ports:
         - "8056:80" # web
+        - "9056:443" # tls
         volumes:
 #            - ~/.composer:/root/.composer # Use for composer caching
 #            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
