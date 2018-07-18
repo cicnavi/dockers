@@ -85,3 +85,20 @@ netsh interface portproxy show v4tov4
 ```
 
 If you know how to do this in different Linux distributions, let me know :). 
+
+#### Running web application using HTTPS
+All containers come with a self-signed certificate already included and configured with Apache.
+To run a web app using HTTPS, you can simply use the "https://" scheme with the address, and then specify the correct port for the cpecific container, like this:
+
+* https://56.dap.test:9056
+* https://70.dap.test:9070
+* https://71.dap.test:9071
+* https://72.dap.test:9072
+
+If you don't want to designate the port each time, you can, again, specify correct port forwarding for port 443, like this:
+
+```shell
+netsh interface portproxy add v4tov4 listenport=443 listenaddress=127.0.0.72 connectport=9072 connectaddress=127.0.0.1
+```
+
+Now we can access our web app over HTTPS by entering the address without port: 'https://72.dap.test'
