@@ -8,22 +8,37 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& apt-get install -y \
 		libmemcached-dev  \
 		libfreetype6-dev \
+		libxml2-dev \
 		libjpeg62-turbo-dev \
 		libpng-dev \
 		zlib1g-dev \
+		libzip-dev \
 		libz-dev \
 		libpq-dev  \
+		libsqlite3-dev  \
 		libicu-dev \
 		g++ \
 		git \
 		zip \
 		libmcrypt-dev \
+		libvpx-dev \
+		libjpeg-dev \
+		libpng-dev \
 		bzip2 \
 		wget \
+		libexpat1-dev \
+		libbz2-dev \
+		libgmp3-dev \
+		libldap2-dev \
+		unixodbc-dev \
+		libsnmp-dev \
+		libpcre3-dev \
+		libtidy-dev \
+		libaspell-dev \
 		tar \
 		less \
 		nano \
-		curl \
+		libcurl4-gnutls-dev \
 		apt-utils\
 	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache mbstring curl json xml bz2 \
 	&& docker-php-ext-configure gd \
