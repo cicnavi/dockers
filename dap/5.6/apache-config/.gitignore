@@ -5,3 +5,5 @@
 !.gitignore
 !README.md
 !100-php-app.56.dap.test.conf-example
+!ssl
+!ssl/*
