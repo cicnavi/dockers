@@ -1,5 +1,22 @@
 version: '2'
 services:
+    73.dap.test:
+        image: cicnavi/dap:7.3
+        container_name: 73.dap.test
+        restart: unless-stopped
+        ports:
+        - "8073:80" # web
+        - "9073:443" # tls
+        volumes:
+#            - ~/.composer:/root/.composer # Use for composer caching
+#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+#            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
+            - "./7.3/src:/var/www/src" # Directory for all apps, change local path as needed.
+            - "./7.3/html:/var/www/html" # Public directory, change local path as needed.
+            - "./7.3/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
+        links:
+            - mysql.dap.test
+
     72.dap.test:
         image: cicnavi/dap:7.2
         container_name: 72.dap.test
