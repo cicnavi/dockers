@@ -14,7 +14,7 @@ services:
             - "./7.3/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./7.3/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.3/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
-            - "./shared:/etc/apache2/config-from-host" # Shared directory between containers.
+            - "./shared:/var/www/shared" # Shared directory between containers.
         links:
             - mysql.dap.test
 
@@ -32,7 +32,7 @@ services:
             - "./7.2/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./7.2/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.2/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
-            - "./shared:/etc/apache2/config-from-host" # Shared directory between containers.
+            - "./shared:/var/www/shared" # Shared directory between containers.
         links:
             - mysql.dap.test
 
@@ -50,7 +50,7 @@ services:
             - "./7.1/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./7.1/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.1/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
-            - "./shared:/etc/apache2/config-from-host" # Shared directory between containers.
+            - "./shared:/var/www/shared" # Shared directory between containers.
         links:
             - mysql.dap.test
             
@@ -68,7 +68,7 @@ services:
             - "./7.0/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./7.0/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.0/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
-            - "./shared:/etc/apache2/config-from-host" # Shared directory between containers.
+            - "./shared:/var/www/shared" # Shared directory between containers.
         links:
             - mysql.dap.test
     
@@ -86,7 +86,7 @@ services:
             - "./5.6/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./5.6/html:/var/www/html" # Public directory, change local path as needed.
             - "./5.6/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
-            - "./shared:/etc/apache2/config-from-host" # Shared directory between containers.
+            - "./shared:/var/www/shared" # Shared directory between containers.
         links:
             - mysql.dap.test
             
