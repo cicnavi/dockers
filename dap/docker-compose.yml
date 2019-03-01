@@ -72,23 +72,23 @@ services:
         links:
             - mysql.dap.test
     
-    56.dap.test:
-        image: cicnavi/dap:5.6
-        container_name: 56.dap.test
-        restart: unless-stopped
-        ports:
-        - "8056:80" # web
-        - "9056:443" # tls
-        volumes:
+#    56.dap.test:
+#        image: cicnavi/dap:5.6
+#        container_name: 56.dap.test
+#        restart: unless-stopped
+#        ports:
+#        - "8056:80" # web
+#        - "9056:443" # tls
+#        volumes:
 #            - ~/.composer:/root/.composer # Use for composer caching
 #            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
 #            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
-            - "./5.6/src:/var/www/src" # Directory for all apps, change local path as needed.
-            - "./5.6/html:/var/www/html" # Public directory, change local path as needed.
-            - "./5.6/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
-            - "./shared:/var/www/shared" # Shared directory between containers.
-        links:
-            - mysql.dap.test
+#            - "./5.6/src:/var/www/src" # Directory for all apps, change local path as needed.
+#            - "./5.6/html:/var/www/html" # Public directory, change local path as needed.
+#            - "./5.6/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
+#            - "./shared:/var/www/shared" # Shared directory between containers.
+#        links:
+#            - mysql.dap.test
             
     mysql.dap.test:
         image: mysql:5.7

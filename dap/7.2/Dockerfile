@@ -40,10 +40,14 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- \
-	--install-dir=/usr/local/bin \
-	--filename=composer
+# Install composer and update path
+ENV COMPOSER_HOME /composer
+ENV PATH /composer/vendor/bin:$PATH
+ENV COMPOSER_ALLOW_SUPERUSER 1
+RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
+
+# Install code quality tools
+RUN composer global require "squizlabs/php_codesniffer=*"
 
 # Enable Apache mod_rewrite.
 RUN a2enmod rewrite ssl headers
