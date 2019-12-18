@@ -45,10 +45,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 		apt-utils \
 		libxrender1 \
 		unzip \
+		libonig-dev \
 	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache mbstring curl json xml bz2 \
-	&& docker-php-ext-configure gd \
-		--with-freetype-dir=/usr/include/ \
-		--with-jpeg-dir=/usr/include/ \
+	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
 	&& docker-php-ext-install -j$(nproc) gd \
 	&& docker-php-ext-configure intl \
 	&& docker-php-ext-install -j$(nproc) intl \
