@@ -1,5 +1,22 @@
 version: '2'
 services:
+    74.dap.test:
+        image: cicnavi/dap:7.4
+        container_name: 74.dap.test
+        restart: unless-stopped
+        ports:
+        - "8074:80" # web
+        - "9074:443" # tls
+        volumes:
+            - ~/.composer:/root/.composer # Use for composer caching
+            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
+            - "./7.3/src:/var/www/src" # Directory for all apps, change local path as needed.
+            - "./7.3/html:/var/www/html" # Public directory, change local path as needed.
+            - "./7.3/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
+            - "./shared:/var/www/shared" # Shared directory between containers.
+        links:
+            - mysql.dap.test
     73.dap.test:
         image: cicnavi/dap:7.3
         container_name: 73.dap.test
@@ -8,9 +25,9 @@ services:
         - "8073:80" # web
         - "9073:443" # tls
         volumes:
-#            - ~/.composer:/root/.composer # Use for composer caching
-#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
-#            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
+            - ~/.composer:/root/.composer # Use for composer caching
+            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
             - "./7.3/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./7.3/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.3/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
@@ -26,9 +43,9 @@ services:
         - "8072:80" # web
         - "9072:443" # tls
         volumes:
-#            - ~/.composer:/root/.composer # Use for composer caching
-#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
-#            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
+            - ~/.composer:/root/.composer # Use for composer caching
+            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
             - "./7.2/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./7.2/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.2/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
@@ -44,9 +61,9 @@ services:
         - "8071:80" # web
         - "9071:443" # tls
         volumes:
-#            - ~/.composer:/root/.composer # Use for composer caching
-#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
-#            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
+            - ~/.composer:/root/.composer # Use for composer caching
+            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
             - "./7.1/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./7.1/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.1/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
@@ -62,9 +79,9 @@ services:
         - "8070:80" # web
         - "9070:443" # tls
         volumes:
-#            - ~/.composer:/root/.composer # Use for composer caching
-#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
-#            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
+            - ~/.composer:/root/.composer # Use for composer caching
+            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
             - "./7.0/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./7.0/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.0/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
