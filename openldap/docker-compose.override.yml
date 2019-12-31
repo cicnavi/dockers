@@ -1,0 +1,5 @@
+version: '2'
+services:
+    phpldapadmin:
+        depends_on:
+            - openldap

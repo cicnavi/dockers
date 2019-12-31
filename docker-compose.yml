@@ -1,0 +1,34 @@
+version: '2'
+services:
+    70.dap.test:
+        extends:
+            service: 70.dap.test
+            file: dap/docker-compose.yml
+        depends_on:
+            - mysql.dap.test
+            - openldap
+
+    74.dap.test:
+        extends:
+            service: 74.dap.test
+            file: dap/docker-compose.yml
+        depends_on:
+            - mysql.dap.test
+            - openldap            
+
+    mysql.dap.test:
+        extends:
+            service: mysql.dap.test
+            file: dap/docker-compose.yml
+
+    openldap:
+        extends:
+            service: openldap
+            file: openldap/docker-compose.yml
+
+    phpldapadmin:
+        extends:
+            service: phpldapadmin
+            file: openldap/docker-compose.yml
+        depends_on:
+          - openldap

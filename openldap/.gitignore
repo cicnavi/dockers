@@ -1,0 +1,15 @@
+
+# Ignore...
+./certs/*
+./ldap/*
+./slapd.d/*
+
+# ...except
+!/*/html/.htaccess
+!/*/html/index.php
+
+!/shared
+!/shared/*
+
+!.gitignore
+!README.md
