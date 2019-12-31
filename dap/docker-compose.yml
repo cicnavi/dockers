@@ -9,14 +9,13 @@ services:
         - "9074:443" # tls
         volumes:
             - ~/.composer:/root/.composer # Use for composer caching
-            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
             - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
             - "./7.3/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./7.3/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.3/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
             - "./shared:/var/www/shared" # Shared directory between containers.
-        links:
-            - mysql.dap.test
+
     73.dap.test:
         image: cicnavi/dap:7.3
         container_name: 73.dap.test
@@ -26,14 +25,12 @@ services:
         - "9073:443" # tls
         volumes:
             - ~/.composer:/root/.composer # Use for composer caching
-            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
             - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
             - "./7.3/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./7.3/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.3/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
             - "./shared:/var/www/shared" # Shared directory between containers.
-        links:
-            - mysql.dap.test
 
     72.dap.test:
         image: cicnavi/dap:7.2
@@ -44,14 +41,12 @@ services:
         - "9072:443" # tls
         volumes:
             - ~/.composer:/root/.composer # Use for composer caching
-            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
             - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
             - "./7.2/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./7.2/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.2/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
             - "./shared:/var/www/shared" # Shared directory between containers.
-        links:
-            - mysql.dap.test
 
     71.dap.test:
         image: cicnavi/dap:7.1
@@ -62,14 +57,12 @@ services:
         - "9071:443" # tls
         volumes:
             - ~/.composer:/root/.composer # Use for composer caching
-            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
             - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
             - "./7.1/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./7.1/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.1/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
             - "./shared:/var/www/shared" # Shared directory between containers.
-        links:
-            - mysql.dap.test
             
     70.dap.test:
         image: cicnavi/dap:7.0
@@ -80,14 +73,12 @@ services:
         - "9070:443" # tls
         volumes:
             - ~/.composer:/root/.composer # Use for composer caching
-            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
             - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
             - "./7.0/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./7.0/html:/var/www/html" # Public directory, change local path as needed.
             - "./7.0/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
             - "./shared:/var/www/shared" # Shared directory between containers.
-        links:
-            - mysql.dap.test
     
 #    56.dap.test:
 #        image: cicnavi/dap:5.6
@@ -104,7 +95,7 @@ services:
 #            - "./5.6/html:/var/www/html" # Public directory, change local path as needed.
 #            - "./5.6/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
 #            - "./shared:/var/www/shared" # Shared directory between containers.
-#        links:
+#        depends_on:
 #            - mysql.dap.test
             
     mysql.dap.test:

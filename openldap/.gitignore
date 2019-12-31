@@ -1,0 +1,9 @@
+
+!/certs
+/certs/*
+!/ldap
+/ldap/*
+!/slapd.d
+/slapd.d/*
+
+!.gitignore

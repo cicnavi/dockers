@@ -1,0 +1,21 @@
+version: '2'
+services:
+    74.dap.test:
+        depends_on:
+            - mysql.dap.test
+
+    73.dap.test:
+        depends_on:
+            - mysql.dap.test
+
+    72.dap.test:
+        depends_on:
+            - mysql.dap.test
+
+    71.dap.test:
+        depends_on:
+            - mysql.dap.test
+            
+    70.dap.test:
+        depends_on:
+            - mysql.dap.test
