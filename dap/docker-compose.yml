@@ -11,9 +11,9 @@ services:
             - ~/.composer:/root/.composer # Use for composer caching
 #            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
             - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
-            - "./7.3/src:/var/www/src" # Directory for all apps, change local path as needed.
-            - "./7.3/html:/var/www/html" # Public directory, change local path as needed.
-            - "./7.3/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
+            - "./7.4/src:/var/www/src" # Directory for all apps, change local path as needed.
+            - "./7.4/html:/var/www/html" # Public directory, change local path as needed.
+            - "./7.4/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
             - "./shared:/var/www/shared" # Shared directory between containers.
 
     73.dap.test:
