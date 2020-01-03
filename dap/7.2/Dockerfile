@@ -27,7 +27,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 		apt-utils \
 		libxrender1 \
 		libldap2-dev \
-	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache \
+		libxml2-dev \
+	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache soap \
 	&& docker-php-ext-configure gd \
 		--with-freetype-dir=/usr/include/ \
 		--with-jpeg-dir=/usr/include/ \
