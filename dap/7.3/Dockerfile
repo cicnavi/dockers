@@ -41,6 +41,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 		libcurl4-gnutls-dev \
 		apt-utils \
 		libxrender1 \
+		libldap2-dev \
 	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache mbstring curl json xml bz2 \
 	&& docker-php-ext-configure gd \
 		--with-freetype-dir=/usr/include/ \
@@ -48,6 +49,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& docker-php-ext-install -j$(nproc) gd \
 	&& docker-php-ext-configure intl \
 	&& docker-php-ext-install -j$(nproc) intl \
+	&& docker-php-ext-configure ldap \
+		--with-libdir=lib/x86_64-linux-gnu/ \
+    && docker-php-ext-install -j$(nproc) ldap \
 	&& pecl install xdebug-2.7.0RC1 \
 	&& pecl install memcached \
 	&& pecl install redis \

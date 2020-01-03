@@ -46,11 +46,15 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 		libxrender1 \
 		unzip \
 		libonig-dev \
+		libldap2-dev \
 	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache mbstring curl json xml bz2 \
 	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
 	&& docker-php-ext-install -j$(nproc) gd \
 	&& docker-php-ext-configure intl \
 	&& docker-php-ext-install -j$(nproc) intl \
+	&& docker-php-ext-configure ldap \
+		--with-libdir=lib/x86_64-linux-gnu/ \
+    && docker-php-ext-install -j$(nproc) ldap \
 	&& pecl install xdebug-2.8.1 \
 	&& pecl install memcached-3.1.4 \
 	&& pecl install redis-5.1.1 \
