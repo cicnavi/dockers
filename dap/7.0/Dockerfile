@@ -49,6 +49,9 @@ ENV PATH /composer/vendor/bin:$PATH
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
+# Copy custom config to PHP config dir.
+COPY php-config/custom.ini /usr/local/etc/php/conf.d/
+
 # Install code quality tools
 RUN composer global require "squizlabs/php_codesniffer=*"
 

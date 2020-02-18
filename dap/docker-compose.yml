@@ -3,7 +3,7 @@ services:
     74.dap.test:
         image: cicnavi/dap:7.4
         container_name: 74.dap.test
-        restart: unless-stopped
+#        restart: unless-stopped
         ports:
         - "8074:80" # web
         - "9074:443" # tls
@@ -19,7 +19,7 @@ services:
     73.dap.test:
         image: cicnavi/dap:7.3
         container_name: 73.dap.test
-        restart: unless-stopped
+#        restart: unless-stopped
         ports:
         - "8073:80" # web
         - "9073:443" # tls
@@ -35,7 +35,7 @@ services:
     72.dap.test:
         image: cicnavi/dap:7.2
         container_name: 72.dap.test
-        restart: unless-stopped
+#        restart: unless-stopped
         ports:
         - "8072:80" # web
         - "9072:443" # tls
@@ -51,7 +51,7 @@ services:
     71.dap.test:
         image: cicnavi/dap:7.1
         container_name: 71.dap.test
-        restart: unless-stopped
+#        restart: unless-stopped
         ports:
         - "8071:80" # web
         - "9071:443" # tls
@@ -67,7 +67,7 @@ services:
     70.dap.test:
         image: cicnavi/dap:7.0
         container_name: 70.dap.test
-        restart: unless-stopped
+#        restart: unless-stopped
         ports:
         - "8070:80" # web
         - "9070:443" # tls
@@ -101,7 +101,7 @@ services:
     mysql.dap.test:
         image: mysql:5.7
         container_name: mysql.dap.test
-        restart: unless-stopped
+#        restart: unless-stopped
         ports:
             - "33306:3306"
         environment:
