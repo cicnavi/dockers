@@ -1,6 +1,7 @@
 version: '2'
 services:
     70.dap.test:
+        restart: 'no'
         extends:
             service: 70.dap.test
             file: dap/docker-compose.yml
@@ -9,6 +10,7 @@ services:
             - openldap
 
     74.dap.test:
+        restart: 'no'
         extends:
             service: 74.dap.test
             file: dap/docker-compose.yml
@@ -17,16 +19,19 @@ services:
             - openldap            
 
     mysql.dap.test:
+        restart: 'no'
         extends:
             service: mysql.dap.test
             file: dap/docker-compose.yml
 
     openldap:
+        restart: 'no'
         extends:
             service: openldap
             file: openldap/docker-compose.yml
 
     phpldapadmin:
+        restart: 'no'
         extends:
             service: phpldapadmin
             file: openldap/docker-compose.yml

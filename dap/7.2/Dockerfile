@@ -38,7 +38,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& docker-php-ext-configure ldap \
 		--with-libdir=lib/x86_64-linux-gnu/ \
     && docker-php-ext-install -j$(nproc) ldap \
-	&& pecl install xdebug-2.6.0 \
+	&& pecl install xdebug-2.9.2 \
 	&& pecl install memcached \
 	&& pecl install redis \
 	&& docker-php-ext-enable xdebug memcached redis \
