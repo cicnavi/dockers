@@ -24,7 +24,14 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
 		curl \
 		libfontconfig1 \
 		libxrender1 \
+		libgmp-dev \
+		re2c \
+		libmhash-dev \
+		file \
     && docker-php-ext-install -j$(nproc) bcmath mcrypt zip pdo pdo_mysql mysqli \
+    && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/local/include/ \
+	&& docker-php-ext-configure gmp  \
+	&& docker-php-ext-install -j$(nproc) gmp \
     && docker-php-ext-configure gd \
 		--with-freetype-dir=/usr/include/ \
 		--with-jpeg-dir=/usr/include/ \

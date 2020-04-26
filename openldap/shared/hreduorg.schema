@@ -1,0 +1,96 @@
+# $OpenLDAP: hreduorg.schema,v 1.3.1 2010/07/23 11:23:45 Dubravko.Penezic@Srce.hr Exp $
+#
+# aai@EduHr
+#
+# Depends upon
+#	core.schema
+#      
+# 2.16.191.10       = MZOS
+#             .1    = aai@EduHr
+#             .1.20 = attributes
+#             .1.21 = objectclass
+#             .1.23 = syntax
+#
+#   aai@EduHr shema kojom se definiraju dodatni atributi za pojedinca
+
+# hrEduOrgUniqueNumber
+# brojcani identifikator ustanove formata 
+# <naziv_identifikatora>: <vrijednost_identifikatora>
+attributetype ( 2.16.191.10.1.20.5
+	NAME 'hrEduOrgUniqueNumber'
+	DESC 'Visestruka vrijednost brojcani identifikator ustanove'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128})
+
+# hrEduOrgMobile
+# broj mobilnog telefona ustanove. Zapisan sukladno normi CCITT E.123.
+attributetype ( 2.16.191.10.1.20.6
+	NAME 'hrEduOrgMobile'
+	DESC 'Broj mobilnog telefona ustanove'
+	EQUALITY telephoneNumberMatch
+	SUBSTR telephoneNumberSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.50)
+
+# hrEduOrgMail
+# Sluzbena e-mail adresa ustanove.
+attributetype ( 2.16.191.10.1.20.1
+	NAME 'hrEduOrgMail'
+	DESC 'Sluzbena e-mail adresa ustanove'
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256})
+
+# hrEduOrgType
+# Tip ustanove prema kategorizaciji MZOS
+attributetype ( 2.16.191.10.1.20.2
+	NAME 'hrEduOrgType'
+	DESC 'Jednostruka vrijednost prema kategorizaciji MZOS'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} SINGLE-VALUE)
+
+# hrEduOrgMember
+# pripadnost nekoj ustanovi; npr. sveucilistu; vrijednost atributa je 
+# identifikator nadredjene ustanove
+attributetype ( 2.16.191.10.1.20.7
+	NAME 'hrEduOrgMember'
+	DESC 'Pripadnost nekoj ustanovi'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128})
+
+# hrEduOrgURL
+# URL adresa Web sjedista ustanove.
+attributetype ( 2.16.191.10.1.20.3
+	NAME 'hrEduOrgURL'
+	DESC 'URL adresa Web sjedista ustanove'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} SINGLE-VALUE)
+
+# hrEduOrgPolicyURI
+# URI s oznakom; pokazuje na sluzbenu politiku ustanove.
+attributetype ( 2.16.191.10.1.20.4
+	NAME 'hrEduOrgPolicyURI'
+	DESC 'URI s oznakom; pokazuje na sluzbenu politiku ustanove'
+	EQUALITY caseExactMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256})
+
+# hrEduOrgOIB
+# OIB ustanove.
+attributetype ( 2.16.191.10.1.20.8
+	NAME 'hrEduOrgOIB'
+	DESC 'OIB ustanove'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{11} SINGLE-VALUE)
+	
+# hrEduOrg
+# hrEduPerson shema definira dodatne atribute kojima se opisuju pojedinci na ustanovama
+objectclass ( 2.16.191.10.1.21.1
+    NAME 'hrEduOrg'
+	DESC 'hrEduOrg dodtani atributi za opis organizacije'
+    SUP organization STRUCTURAL
+    MUST (hrEduOrgUniqueNumber $ hrEduOrgMail $ hrEduOrgType $ hrEduOrgURL $ hrEduOrgOIB)
+    MAY (hrEduOrgMobile $ hrEduOrgMember $ hrEduOrgPolicyURI))

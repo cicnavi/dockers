@@ -1,0 +1,244 @@
+# $OpenLDAP: hreduperson.schema,v 1.3.1 2010/07/23 11:23:45 Dubravko.Penezic@Srce.hr Exp $
+#
+# aai@EduHr
+#
+# Depends upon
+#	core.schema
+#      
+# 2.16.191.10       = MZOS
+#             .1    = aai@EduHr
+#             .1.10 = attributes
+#             .1.11 = objectclass
+#             .1.13 = syntax
+#
+#   aai@EduHr shema kojom se definiraju dodatni atributi za pojedinca
+
+# hrEduPersonUniqueID
+# Vrijednost atributa je jedinstveni identifikator osobe. Ovaj se identifikator 
+# koristi pri interinstitucionalnoj autentikaciji.
+# sintaksa: <lokalni_id>@<identifikator_imenika> 
+attributetype ( 2.16.191.10.1.10.15
+	NAME 'hrEduPersonUniqueID'
+	DESC 'Jedinstveni identifikator osobe'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{96} SINGLE-VALUE)
+
+# hrEduPersonUniqueNumber
+# Vrijednost atributa je brojcani identifikator osobe. 
+# Koristi se za dodatnu provjeru identiteta kod autorizacije/accountinga
+# sintaksa: tip_identifikatora:<vrijednost>
+attributetype ( 2.16.191.10.1.10.14
+	NAME 'hrEduPersonUniqueNumber'
+	DESC 'Jedinstveni identifikator osobe'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+# hrEduPersonHomeOrg
+# DNS (Internet) domena maticne ustanove
+attributetype ( 2.16.191.10.1.10.13
+	NAME 'hrEduPersonHomeOrg'
+	DESC 'DNS (Internet) domena maticne ustanove'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} SINGLE-VALUE)
+
+# hrEduPersonExtensionNumber
+# Lokalni telefonski broj korisnika u ustanovi
+attributetype ( 2.16.191.10.1.10.16
+	NAME 'hrEduPersonExtensionNumber'
+	DESC 'Lokalni telefonski broj korisnika u ustanovi'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{16})
+
+# hrEduPersonGender
+# Spol osobe prema sifarniku
+attributetype ( 2.16.191.10.1.10.1
+	NAME 'hrEduPersonGender'
+	DESC 'Spol osobe prema sifarniku'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1} SINGLE-VALUE)
+
+# hrEduPersonDateOfBirth
+# Datum rodjenja osobe zapisan po RFC 3339 standardu (ggggmmdd)
+attributetype ( 2.16.191.10.1.10.2
+	NAME 'hrEduPersonDateOfBirth'
+	DESC 'Datum rodjenja osobe'
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE)
+
+# hrEduPersonProfessionalStatus
+# Najvisi stupanj strucne spreme ili akademski stupanj koji osoba posjeduje. 
+# Prema sifarniku hrEdu001 .
+attributetype ( 2.16.191.10.1.10.12
+	NAME 'hrEduPersonProfessionalStatus'
+	DESC 'Najvisi stupanj strucne spreme ili akademski stupanj koji osoba posjeduje'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{16} SINGLE-VALUE)
+
+# hrEduPersonAcademicStatus
+# Zvanje koje je osoba stekla u sustavu znanosti i visokog skolstva. 
+# Prema sifarniku hrEdu002.
+attributetype ( 2.16.191.10.1.10.11
+	NAME 'hrEduPersonAcademicStatus'
+	DESC 'Zvanje koje je osoba stekla u sustavu znanosti i visokog skolstva.'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} SINGLE-VALUE)
+
+# hrEduPersonScienceArea
+# Podrucje znanosti kojim se osoba bavi prema klasifikaciji MZOS. 
+attributetype ( 2.16.191.10.1.10.17
+	NAME 'hrEduPersonScienceArea'
+	DESC 'Podrucje znanosti kojim se osoba bavi prema klasifikaciji MZOS.'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64} SINGLE-VALUE)
+
+# hrEduPersonTitle
+# Polozaj osobe u organizacijskoj shemi ustanove (primjerice voditelj odjela 
+# ili ravnatelj).
+attributetype ( 2.16.191.10.1.10.3
+	NAME 'hrEduPersonTitle'
+	DESC 'Polozaj osobe u organizacijskoj shemi ustanove (primjerice voditelj odjela ili ravnatelj).'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128})
+
+# hrEduPersonAffiliation
+# Odredjuje vezu izmedju osobe i maticne ustanove (primjerice student, 
+# djelatnik, ...). Prema sifarniku hrEdu004.
+attributetype ( 2.16.191.10.1.10.4
+	NAME 'hrEduPersonAffiliation'
+	DESC 'Odredjuje vezu izmedju osobe i maticne ustanove.'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128})
+
+# hrEduPersonPrimaryAffiliation
+# Temeljna (primarna) veza izmedju osobe i maticne ustanove. Prema sifarniku 
+# hrEdu004.
+attributetype ( 2.16.191.10.1.10.5
+	NAME 'hrEduPersonPrimaryAffiliation'
+	DESC 'Temeljna (primarna) veza izmedju osobe i maticne ustanove.'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128} SINGLE-VALUE)
+
+# hrEduPersonExpireDate
+# Datum do kojeg vrijedi odnos s ustanovom definiran u temeljnoj pripadnosti 
+# zapisan po RFC 3339 standardu (ggggmmdd)
+attributetype ( 2.16.191.10.1.10.6
+	NAME 'hrEduPersonExpireDate'
+	DESC 'Datum do kojeg vrijedi odnos s ustanovom definiran u temeljnoj pripadnosti.'
+	EQUALITY caseExactMatch
+        ORDERING caseExactOrderingMatch
+        SUBSTR caseExactSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{8} SINGLE-VALUE)
+
+# hrEduPersonStaffCategory
+# Vrsta posla koju osoba obavlja u ustanovi (npr. nastavnik, istrazivac, 
+# administrativno osoblje, ...). Prema sifarniku hrEdu005.
+attributetype ( 2.16.191.10.1.10.10
+	NAME 'hrEduPersonStaffCategory'
+	DESC 'Vrsta posla koju osoba obavlja u ustanovi.'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64})
+
+# hrEduPersonRole
+# Uloga/funkcija koju osoba ima u ustanovi ili obnasa u ime ustanove (npr. 
+# CARNet sistem inzenjer, CARNet koordinator, ICT koordinator, ISVU 
+# koordinator, ...). Prema Sifarniku hrEdu006. 
+attributetype ( 2.16.191.10.1.10.7
+	NAME 'hrEduPersonRole'
+	DESC 'Uloga/funkcija koju osoba ima u ustanovi ili obnasa u ime ustanove.'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{128})
+
+# hrEduPersonGroupMember
+# Grupa kojoj korisnik pripada; odredjuje se za potrebe projekata ili 
+# virtualnih organizacija (VO)
+attributetype ( 2.16.191.10.1.10.8
+	NAME 'hrEduPersonGroupMember'
+	DESC 'Grupa kojoj korisnik pripada.'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64})
+
+# hrEduPersonCommURI
+# URI s oznakom koji sadrzi pokazivac na informaciju o desktop uredjaju za 
+# potrebe usluge videokonferencija (po H.350 standardu)
+attributetype ( 2.16.191.10.1.10.9
+	NAME 'hrEduPersonCommURI'
+	DESC 'URI s oznakom koji sadrzi pokazivac na informaciju o desktop uredjaju za potrebe usluge videokonferencija (po H.350 standardu).'
+	EQUALITY caseExactMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+# hrEduPersonPrivacy
+# omogucuje oznacavanje atributa ciji sadrzaj nece biti dostupan izvan maticne 
+# ustanove; pruza mogucnost da se pojedini podaci o osobi zaastite od 
+# pristupa osim u lokalne svrhe
+attributetype ( 2.16.191.10.1.10.18
+        NAME 'hrEduPersonPrivacy'
+        DESC 'Oznaka privatnosti'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{40})
+
+# hrEduPersonStudentCategory
+# detaljnija informacija o osobi koja je uz ustanovu vezana kao student ili ucenik
+attributetype ( 2.16.191.10.1.10.19
+        NAME 'hrEduPersonStudentCategory'
+        DESC 'detaljnija informacija o osobi koja je uz ustanovu vezana kao student ili ucenik'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{64} SINGLE-VALUE)
+
+# hrEduPersonPersistentID
+# trajna korisnicka oznaka
+attributetype ( 2.16.191.10.1.10.20
+        NAME 'hrEduPersonPersistentID'
+        DESC 'trajna korisnicka oznaka'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32} SINGLE-VALUE)
+
+# hrEduPersonOIB
+# OIB
+attributetype ( 2.16.191.10.1.10.21
+        NAME 'hrEduPersonOIB'
+        DESC 'OIB'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{11} SINGLE-VALUE)
+        
+# hrEduPersonCardNum
+# broj kartice
+attributetype ( 2.16.191.10.1.10.22
+        NAME 'hrEduPersonCardNum'
+        DESC 'broj vazece pametne kartice koju osoba posjeduje'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32})
+                        
+# hrEduPerson
+# hrEduPerson shema definira dodatne atribute kojima se opisuju pojedinci na ustanovama
+objectclass	( 2.16.191.10.1.11.1
+    NAME 'hrEduPerson'
+    DESC 'hrEduPerson dodatni atributi za opis korisnika'
+    SUP inetOrgPerson STRUCTURAL
+    MUST (hrEduPersonUniqueID $ hrEduPersonUniqueNumber $ hrEduPersonHomeOrg $ hrEduPersonAffiliation $ hrEduPersonPrimaryAffiliation $ hrEduPersonExpireDate $ hrEduPersonPersistentID $ hrEduPersonOIB)
+    MAY (hrEduPersonExtensionNumber $ hrEduPersonGender $ hrEduPersonDateOfBirth $ hrEduPersonProfessionalStatus $ hrEduPersonAcademicStatus $ hrEduPersonScienceArea $ hrEduPersonTitle $ hrEduPersonStaffCategory $ hrEduPersonRole $ hrEduPersonGroupMember $ hrEduPersonCommURI $ hrEduPersonPrivacy $ hrEduPersonStudentCategory $ hrEduPersonCardNum $ eduPersonOrcid))
+
+# eduPersonOrcid
+# eduPersonOrcid iz sheme eduPerson
+attributetype ( 1.3.6.1.4.1.5923.1.1.1.16
+          NAME 'eduPersonOrcid'
+          DESC 'ORCID researcher identifiers belonging to the principal'
+          EQUALITY caseIgnoreMatch
+          SYNTAX '1.3.6.1.4.1.1466.115.121.1.15' )
