@@ -30,7 +30,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
 		file \
     && docker-php-ext-install -j$(nproc) bcmath mcrypt zip pdo pdo_mysql mysqli \
     && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/local/include/ \
-	&& docker-php-ext-configure gmp  \
+	&& docker-php-ext-configure gmp \
 	&& docker-php-ext-install -j$(nproc) gmp \
     && docker-php-ext-configure gd \
 		--with-freetype-dir=/usr/include/ \
@@ -39,7 +39,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
 	&& docker-php-ext-configure intl \
 	&& docker-php-ext-install -j$(nproc) intl \
 	&& pecl install xdebug-2.5.5 \
-	&& pecl install redis \
+	&& pecl install redis-3.1.0 \
 	&& docker-php-ext-enable xdebug redis \
     && apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
