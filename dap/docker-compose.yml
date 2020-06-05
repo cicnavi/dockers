@@ -109,3 +109,4 @@ services:
 #            MYSQL_ROOT_PASSWORD: changeMe
         volumes:
             - ~/volumes/mysql:/var/lib/mysql
+            - "./shared:/var/www/shared" # Shared directory between containers.

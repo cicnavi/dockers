@@ -1,9 +1,6 @@
 FROM php:7.4-apache
 
-# Use default php.ini (it is development version).
-# COPY php-config/php.ini /usr/local/etc/php/
-# Use the default development configuration
-# RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+# Use the default development php.ini configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # Setup bare-minimum extra extensions for Laravel & others
@@ -79,6 +76,9 @@ RUN composer global require "phpstan/phpstan=*"
 RUN composer global require "vimeo/psalm=*"
 RUN composer global require "sensiolabs/security-checker=*"
 RUN composer global require "phpunit/phpunit=*"
+
+# Copy custom config to PHP config dir.
+COPY php-config/custom.ini "$PHP_INI_DIR/conf.d/"
 
 # Enable Apache mod_rewrite.
 RUN a2enmod rewrite ssl headers

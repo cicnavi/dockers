@@ -67,6 +67,18 @@ RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/
 
 # Install code quality tools
 RUN composer global require "squizlabs/php_codesniffer=*"
+RUN composer global require "pheromone/phpcs-security-audit=*"
+RUN composer global require "phpcompatibility/php-compatibility=*"
+RUN composer global require "dealerdirect/phpcodesniffer-composer-installer=*"
+RUN composer global require "friendsofphp/php-cs-fixer=*"
+RUN composer global require "phpmd/phpmd=*"
+RUN composer global require "phpstan/phpstan=*"
+RUN composer global require "vimeo/psalm=*"
+RUN composer global require "sensiolabs/security-checker=*"
+RUN composer global require "phpunit/phpunit=*"
+
+# Copy custom config to PHP config dir.
+COPY php-config/custom.ini /usr/local/etc/php/conf.d/
 
 # Enable Apache mod_rewrite.
 RUN a2enmod rewrite ssl headers
