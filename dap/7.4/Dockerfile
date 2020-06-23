@@ -44,7 +44,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 		unzip \
 		libonig-dev \
 		libldap2-dev \
-	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache mbstring curl json xml bz2 soap \
+	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache mbstring curl json xml bz2 soap gmp \
 	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
 	&& docker-php-ext-install -j$(nproc) gd \
 	&& docker-php-ext-configure intl \
@@ -81,7 +81,7 @@ RUN composer global require "phpunit/phpunit=*"
 COPY php-config/custom.ini "$PHP_INI_DIR/conf.d/"
 
 # Enable Apache mod_rewrite.
-RUN a2enmod rewrite ssl headers
+RUN a2enmod rewrite ssl headers proxy proxy_http
 
 # Create required custom directories
 RUN mkdir -p /var/www/src /etc/apache2/config-from-host

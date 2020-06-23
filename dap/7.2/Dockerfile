@@ -28,7 +28,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 		libxrender1 \
 		libldap2-dev \
 		libxml2-dev \
-	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache soap \
+		libgmp3-dev \
+	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache soap gmp \
 	&& docker-php-ext-configure gd \
 		--with-freetype-dir=/usr/include/ \
 		--with-jpeg-dir=/usr/include/ \
@@ -67,7 +68,7 @@ RUN composer global require "phpunit/phpunit=*"
 COPY php-config/custom.ini /usr/local/etc/php/conf.d/
 
 # Enable Apache mod_rewrite.
-RUN a2enmod rewrite ssl headers
+RUN a2enmod rewrite ssl headers proxy proxy_http
 
 # Create required custom directories
 RUN mkdir -p /var/www/src /etc/apache2/config-from-host
