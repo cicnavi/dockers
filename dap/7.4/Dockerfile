@@ -98,3 +98,6 @@ RUN echo "" >> /etc/apache2/apache2.conf \
 # Change uid and gid of apache to docker user uid/gid 
 RUN usermod -u 1000 www-data \
     && groupmod -g 1000 www-data
+
+# Set timezone
+RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
