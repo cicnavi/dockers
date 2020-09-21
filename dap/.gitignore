@@ -5,6 +5,9 @@
 # ...except
 !/*/html/.htaccess
 !/*/html/index.php
+!/*/html/*.png
+!/*/html/*.ico
+!/*/html/site.webmanifest
 
 !/shared
 !/shared/*
