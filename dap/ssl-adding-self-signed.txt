@@ -1,3 +1,13 @@
+Starting form dockers 73.dap.test and 74.dap.test we have prepared a localhost which can be accessed using HTTPS
+The URLs are
+* https://localhost:9073
+* https://localhost:9074
+
+If you don't want to use localhost, here is how you can enable you own self-signed cert / domain.
+If you want, you can use already prepared cert for particular container *.dap.test. Just make sure to add a hostname
+to your hosts file, and than follow the procedure to create your own virtual host.
+
+The following commands are reminder on how the key and cert were generated:
 $ docker exec -it *.dap.test bash
 $ cd /etc/apache2/config-from-host/
 $ mkdir ssl
@@ -28,7 +38,8 @@ SSLStaplingCache "shmcb:logs/stapling-cache(150000)"
 SSLOpenSSLConfCmd DHParameters "/etc/apache2/config-from-host/ssl/dhparam.pem"
 #---end
 
-$ cp ../sites-available/default-ssl.conf .
+Use the existing available ssl site conf, or paste the text below
+$ cp ../sites-available/default-ssl.conf ./some-file-name.conf
 
 Change the email, host and cert path configuration:
 #---start

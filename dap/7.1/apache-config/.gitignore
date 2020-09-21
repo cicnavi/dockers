@@ -4,6 +4,8 @@
 # ...except some files
 !.gitignore
 !README.md
-!100-php-app.71.dap.test.conf-example
+!100-php-app.73.dap.test.conf-example
 !ssl
 !ssl/*
+!ssl-params.conf
+!default-ssl.conf

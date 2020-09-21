@@ -7,3 +7,5 @@
 !100-php-app.73.dap.test.conf-example
 !ssl
 !ssl/*
+!ssl-params.conf
+!default-ssl.conf
