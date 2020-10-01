@@ -110,3 +110,18 @@ services:
         volumes:
             - ~/volumes/mysql:/var/lib/mysql
             - "./shared:/var/www/shared" # Shared directory between containers.
+
+    mysql8.dap.test:
+        image: mysql:8
+        container_name: mysql8.dap.test
+        #        restart: unless-stopped
+        ports:
+            - "33806:3306"
+        environment:
+            # We can run MySQL without root password, or we can set it here.
+            # Comment out one of the next two lines:
+        #    MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+             MYSQL_ROOT_PASSWORD: badabing
+        volumes:
+            - ~/volumes/mysql8:/var/lib/mysql
+            - "./shared:/var/www/shared" # Shared directory between containers.

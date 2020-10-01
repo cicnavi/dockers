@@ -50,6 +50,12 @@ services:
             service: mysql.dap.test
             file: dap/docker-compose.yml
 
+    mysql8.dap.test:
+        restart: 'no'
+        extends:
+            service: mysql8.dap.test
+            file: dap/docker-compose.yml
+
     openldap:
         restart: 'no'
         extends:
