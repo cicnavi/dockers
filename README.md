@@ -1,6 +1,5 @@
 # cicnavi Docker Containers
 
-These are Docker specifications that I use in my day to day work.
 You are free to clone this repo and run them as you wish.
 
 ```shell
@@ -33,9 +32,9 @@ or if we only wish to run 'DAP' containers, or if we only wish to run 'OpenLDAP'
 
 ### DAP (Debian Apache PHP) Containers
 
-DAP contaners are available with different PHP versions. Each folder in 'dap' folder coresponds to specific PHP version 
-which is used in a container. So, with this approach we can easily run different containers to test our web application 
-on different PHP version.
+DAP containers are available with different PHP versions. Each folder in 'dap' folder corresponds to 
+specific PHP version which is used in a container. So, with this approach we can easily run different containers 
+to test our web application on different PHP version.
 
 #### Running DAP containers
 Once you've cloned this repo, go to 'dap' directory:
@@ -64,19 +63,21 @@ Apache configuration can be set by creating files ending in '.conf' in 'apache-c
 PHP configuration can be set in 'php.ini' file which is available in 'php-config' folder.
 
 #### Setting source files for your web application
-In each PHP version folder, you will find folders 'src' and 'html'. Folder 'src' should contain your web application 
-source files, while the 'html' folder should contain files which will be served publicly by the Apache web server. 
+In each PHP version folder, you will find folders 'src', 'shared' and 'html'.
+Folder 'src' can contain source files which should be available to only one specific container. 
+'shared' folder will contain files shared between all containers (dap/shared), while the 'html' folder should 
+contain files which will be served publicly by the Apache web server. 
 By default, in 'html' folder you'll find 'index.php' file which will dump PHP information.
 
 When you put application source files in 'src' folder, you can enter the 'bash' in the container, and create a symlink 
-to the application source which will be served publicly.
+to the application source which will be served publicly (the same applies to 'shared' folder).
 
 For example, let's enter the 'bash' in '72.dap.test' container:
 ```shell
 docker exec -it 72.dap.test bash
 ```
 By default, you'll be positioned in '/var/www/html' folder. Here you can create a symlink to a source file or folder 
-you whish to be serverd by Apache:
+you wish to be served by Apache:
 ```shell
 ln -s ../src/some-php-app/public some-php-app
 ```
@@ -87,7 +88,7 @@ you should adjust symlinks to suit your needs.
 If you look at the 'docker-compose.yml' file, you'll find port specifications for different containers. By default, 
 container which has PHP version 7.0 will use port 8070. Container with PHP version 7.1 will use port 8071, and so on.
 
-This means that we can now access our web application on localhost URL by specifing the right port for the container. 
+This means that we can now access our web application on localhost URL by specifying the right port for the container. 
 For example, since we deployed our app to container 72.dap.test, we can use port 8072 to open it in browser: 
 http://localhost:8072/some-php-app/.
 
@@ -102,9 +103,10 @@ For example, you can add the following entries:
 127.0.0.72 72.dap.test
 127.0.0.73 73.dap.test
 127.0.0.74 74.dap.test
+127.0.0.80 80.dap.test
 127.0.0.100 mysql.dap.test
 ```
-Note that we specify different IP for different host. This way you can enter URL for the container like this: 
+Note that we specify different IP for a different host. This way you can enter URL for the container like this: 
 http://72.dap.test:8072. However, notice that we still have to enter the port of the container, so we didn't get to 
 far yet. We want to only enter hostname for the container. To do that we need to forward specific ports on specific 
 IP addresses, to other ports. 
@@ -133,7 +135,7 @@ If you know how to do this in different Linux distributions, let me know :).
 #### Running web application using HTTPS
 All containers come with a self-signed certificate already included and configured with Apache.
 To run a web app using HTTPS, you can simply use the "https://" scheme with the address, and then specify the correct 
-port for the cpecific container, like this:
+port for the specific container, like this:
 
 * https://56.dap.test:9056
 * https://70.dap.test:9070
@@ -141,6 +143,7 @@ port for the cpecific container, like this:
 * https://72.dap.test:9072
 * https://73.dap.test:9073
 * https://74.dap.test:9074
+* https://80.dap.test:9080
 
 If you don't want to designate the port each time, you can, again, specify correct port forwarding for port 443, 
 like this:

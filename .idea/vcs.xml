@@ -5,8 +5,8 @@
     <mapping directory="$PROJECT_DIR$/dap/7.0/src/aai/aosi" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/dap/7.0/src/unizg/doktorske-promocije-laravel" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/dap/7.3/src/aai/aosi" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/dap/7.4/src/personal/alg-ds-php" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/dap/7.4/src/personal/snooper" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/dap/7.4/src/test/laravel-6" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dap/70/src/aai/aosi" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dap/70/src/unizg/doktorske-promocije-laravel" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dap/73/src/aai/aosi" vcs="Git" />
   </component>
 </project>

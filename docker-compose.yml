@@ -8,6 +8,7 @@ services:
         depends_on:
             - mysql.dap.test
             - openldap
+
     70.dap.test:
         restart: 'no'
         extends:
@@ -42,7 +43,16 @@ services:
             file: dap/docker-compose.yml
         depends_on:
             - mysql.dap.test
-            - openldap            
+            - openldap
+
+    80.dap.test:
+        restart: 'no'
+        extends:
+            service: 80.dap.test
+            file: dap/docker-compose.yml
+        depends_on:
+            - mysql8.dap.test
+            - openldap
 
     mysql.dap.test:
         restart: 'no'
