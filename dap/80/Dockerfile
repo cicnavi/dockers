@@ -50,6 +50,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 		libc-client-dev \
 		libkrb5-dev \
 		libpspell-dev \
+		librabbitmq-dev \
+		librabbitmq4 \
     && phpModules=" \
                 bcmath \
                 bz2 \
@@ -83,12 +85,18 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
 	&& docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
 	&& docker-php-ext-install -j$(nproc) $phpModules \
-	&& pecl install xdebug-3 \
-	&& pecl install memcached-3 \
-	&& pecl install redis-5 \
-	&& docker-php-ext-enable xdebug memcached redis \
+	&& pecl install xdebug-3.0.0 \
+	&& pecl install memcached-3.1.5 \
+	&& pecl install redis-5.3.2 \
+	&& pecl install apcu-5.1.19 \
+	&& pecl install igbinary-3.1.6 \
+	&& pecl install mongodb-1.9.0 \
+	&& docker-php-ext-enable xdebug memcached redis apcu igbinary mongodb \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+#RUN pecl install amqp-1.6.0 \
+#	&& docker-php-ext-enable amqp \
 
 # Install composer and update path
 ENV COMPOSER_HOME /composer
