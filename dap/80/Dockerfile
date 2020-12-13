@@ -95,6 +95,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# https://stackoverflow.com/questions/9520914/installing-amqp-through-pecl
 #RUN pecl install amqp-1.6.0 \
 #	&& docker-php-ext-enable amqp \
 
