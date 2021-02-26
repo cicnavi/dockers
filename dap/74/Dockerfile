@@ -61,7 +61,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 
 # Install composer and update path
 ENV COMPOSER_HOME /composer
-ENV PATH /composer/vendor/bin:$PATH
+ENV PATH $PATH:/composer/vendor/bin
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
@@ -79,6 +79,19 @@ RUN composer global require "phpunit/phpunit=*"
 
 # Copy custom config to PHP config dir.
 COPY php-config/custom.ini "$PHP_INI_DIR/conf.d/"
+
+# Sonar Scanner installation
+ENV PATH $PATH:/opt/sonar-scanner/bin
+ENV SONAR_SCANNER_VERSION "4.6.0.2311-linux"
+ENV SONAR_SCANNER_FILENAME "sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
+ENV SONAR_SCANNER_DL_URL "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli"
+RUN rm -f /opt/${SONAR_SCANNER_FILENAME} \
+    && wget ${SONAR_SCANNER_DL_URL}/${SONAR_SCANNER_FILENAME} -O /opt/${SONAR_SCANNER_FILENAME} \
+    && unzip /opt/${SONAR_SCANNER_FILENAME} -d /opt \
+    && ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION} /opt/sonar-scanner \
+    && touch /etc/profile.d/sonar-scanner.sh \
+    # Make available for login shells
+    && printf '%s\n' '#/bin/bash' 'export PATH="$PATH:/opt/sonar-scanner/bin"' > /etc/profile.d/sonar-scanner.sh
 
 # Enable Apache mod_rewrite.
 RUN a2enmod rewrite ssl headers proxy proxy_http
