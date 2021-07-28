@@ -77,9 +77,6 @@ RUN composer global require "vimeo/psalm=*"
 RUN composer global require "sensiolabs/security-checker=*"
 RUN composer global require "phpunit/phpunit=*"
 
-# Copy custom config to PHP config dir.
-COPY php-config/custom.ini "$PHP_INI_DIR/conf.d/"
-
 # Sonar Scanner installation
 ENV PATH $PATH:/opt/sonar-scanner/bin
 ENV SONAR_SCANNER_VERSION "4.6.0.2311-linux"
@@ -97,20 +94,34 @@ RUN rm -f /opt/${SONAR_SCANNER_FILENAME} \
 RUN a2enmod rewrite ssl headers proxy proxy_http
 
 # Create required custom directories
-RUN mkdir -p /var/www/src /etc/apache2/config-from-host
+RUN mkdir -p /var/www/src /etc/apache2/config-from-host /etc/apache2/shared-config-from-host
+
+# Set global ServerName directive
+RUN echo "" >> /etc/apache2/apache2.conf \
+	&& echo "# Global server name directive" >> /etc/apache2/apache2.conf \
+	&& echo "ServerName 127.0.0.1" >> /etc/apache2/apache2.conf
 
 # Include optional Apache configuration from host.
 RUN echo "" >> /etc/apache2/apache2.conf \
 	&& echo "# Include the configurations from the host machine" >> /etc/apache2/apache2.conf \
-	&& echo "IncludeOptional config-from-host/*.conf" >> /etc/apache2/apache2.conf
+	&& echo "IncludeOptional config-from-host/*.conf" >> /etc/apache2/apache2.conf \
+	&& echo "IncludeOptional shared-config-from-host/*.conf" >> /etc/apache2/apache2.conf
 
 # Set permissions for Apache user and group
 #RUN chown -R www-data:www-data /var/www/html \
 #	&& chown -R www-data:www-data /var/www/src
 
-# Change uid and gid of apache to docker user uid/gid 
+# Set timezone
+RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
+
+# Copy some required files to container
+COPY shared/scripts /var/scripts
+RUN chmod a+x /var/scripts/*
+# Copy custom config to PHP config dir.
+COPY 74/php-config/custom.ini "$PHP_INI_DIR/conf.d/"
+
+# Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data \
     && groupmod -g 1000 www-data
 
-# Set timezone
-RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
+CMD /var/scripts/run.sh

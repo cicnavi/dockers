@@ -1,26 +1,29 @@
 # cicnavi Docker Containers
 
-You are free to clone this repo and run them as you wish.
-
-```shell
-git clone https://github.com/cicnavi/dockers.git dockers
-```
-
-To run containers you have to have Docker installed on your system.
+These are LAMP (Linux, Apache, MySQL, PHP) oriented containers which I use in my day-to-day 
+development work. Main purpose is to have development environment available with different
+versions of PHP available, and also with tools like composer, phpunit, psalm, phpcs...
 
 ## Available containers
 
 - DAP (Debian Apache PHP), references MySQL
 - OpenLDAP and phpLDAPadmin (pure osixia/openldap, no customizations)
 
-To run all mentioned containers, once you've cloned this repo, go to 'dockers' directory:
+## Run containers
+Clone the repo, for example:
+
+```shell
+git clone https://github.com/cicnavi/dockers.git dockers
+```
+
+To run mentioned containers, go to 'dockers' directory:
 
 ```shell
 cd dockers
 ```
 
-Here you'll find a 'docker-compose.yml' file. This means you can use 'docker-compose' command to easily run defined 
-containers (you can edit that file to suit your needs if you wish):
+Here you'll find a 'docker-compose.yml' file. This means you can use 'docker-compose' command 
+to easily run defined containers (you can edit that file to suit your needs if you wish):
 
 ```shell
 docker-compose up -d
@@ -28,7 +31,7 @@ docker-compose up -d
 
 If you look at the 'dockers/docker-compose.yml' file, you'll notice that it actually extends other docker-compose.yml 
 files from 'dap' and 'openldap' directories. This way we have a separate configuration if we wish to run all containers, 
-or if we only wish to run 'DAP' containers, or if we only wish to run 'OpenLDAP' containers, etc. 
+or if we only wish to run 'DAP' containers, or if we only wish to run 'OpenLDAP' containers, etc.
 
 ### DAP (Debian Apache PHP) Containers
 
@@ -63,18 +66,20 @@ Apache configuration can be set by creating files ending in '.conf' in 'apache-c
 PHP configuration can be set in 'php.ini' file which is available in 'php-config' folder.
 
 #### Setting source files for your web application
-In each PHP version folder, you will find folders 'src', 'shared' and 'html'.
-Folder 'src' can contain source files which should be available to only one specific container. 
-'shared' folder will contain files shared between all containers (dap/shared), while the 'html' folder should 
-contain files which will be served publicly by the Apache web server. 
+In 'dap' folder you will find 'shared/src' folder. Also, in each PHP version folder, 
+you will find folders 'src' and 'html'.
+Folder 'src' can contain source files which should be available to only one specific container or to all containers
+if you use 'shared/src' folder. 
+
+The 'html' folder should contain files which will be served publicly by the Apache web server. 
 By default, in 'html' folder you'll find 'index.php' file which will dump PHP information.
 
 When you put application source files in 'src' folder, you can enter the 'bash' in the container, and create a symlink 
 to the application source which will be served publicly (the same applies to 'shared' folder).
 
-For example, let's enter the 'bash' in '72.dap.test' container:
+For example, let's enter the 'bash' in '80.dap.test' container:
 ```shell
-docker exec -it 72.dap.test bash
+docker exec -it 80.dap.test bash
 ```
 By default, you'll be positioned in '/var/www/html' folder. Here you can create a symlink to a source file or folder 
 you wish to be served by Apache:
@@ -86,42 +91,41 @@ you should adjust symlinks to suit your needs.
 
 #### Running web application
 If you look at the 'docker-compose.yml' file, you'll find port specifications for different containers. By default, 
-container which has PHP version 7.0 will use port 8070. Container with PHP version 7.1 will use port 8071, and so on.
+container which has PHP version 7.4 will use port 8074. Container with PHP version 8.0 will use port 8080, and so on.
 
 This means that we can now access our web application on localhost URL by specifying the right port for the container. 
-For example, since we deployed our app to container 72.dap.test, we can use port 8072 to open it in browser: 
-http://localhost:8072/some-php-app/.
+For example, since we deployed our app to container 80.dap.test, we can use port 8080 to open it in browser: 
+http://localhost:8080/some-php-app/.
 
-If you only enter http://localhost:8072, you'll get PHP info dump.
+If you only enter http://localhost:8080, you'll get PHP info dump.
 
 #### Specifying container host names and forwarding ports
 You can edit your hosts file and add host names for each container.
 For example, you can add the following entries:
 ```
 127.0.0.56 56.dap.test
-127.0.0.71 71.dap.test
-127.0.0.72 72.dap.test
-127.0.0.73 73.dap.test
 127.0.0.74 74.dap.test
 127.0.0.80 80.dap.test
 127.0.0.100 mysql.dap.test
 ```
 Note that we specify different IP for a different host. This way you can enter URL for the container like this: 
-http://72.dap.test:8072. However, notice that we still have to enter the port of the container, so we didn't get to 
-far yet. We want to only enter hostname for the container. To do that we need to forward specific ports on specific 
+http://80.dap.test:8080. 
+
+If we want to only enter hostname for the container, we can forward specific ports on specific 
 IP addresses, to other ports. 
 
-So, we want to forward port 80 on specific IP address to specific port used on the container. Let's do that for our 
-container '72.dap.test'. When we enter the URL http://72.dap.test, by default port 80 will be used and our request 
-will be forwarded to IP 127.0.0.72 (which we specified in hosts file). When that happens, we will forward that request 
-to port 8072 on IP 127.0.0.1, because on that port we have our '72.dap.test' container waiting for requests 
+For example, we want to forward port 80 on specific IP address to 
+specific port used on the container. Let's do that for our 
+container '80.dap.test'. When we enter the URL http://80.dap.test, by default port 80 will be used and our request 
+will be forwarded to IP 127.0.0.80 (which we specified in hosts file). When that happens, we will forward that request 
+to port 8080 on IP 127.0.0.1, because on that port we have our '80.dap.test' container waiting for requests 
 (this is defined in docker-compose.yml).
 
 On Windows OS, we can enter the following command to specify port forwarding:
 ```shell
-netsh interface portproxy add v4tov4 listenport=80 listenaddress=127.0.0.72 connectport=8072 connectaddress=127.0.0.1
+netsh interface portproxy add v4tov4 listenport=80 listenaddress=127.0.0.80 connectport=8080 connectaddress=127.0.0.1
 ```
-Once we do that, we can enter the URL 'http://72.dap.test' and our request will be forwarded to our '72.dap.test' 
+Once we do that, we can enter the URL 'http://72.dap.test' and our request will be forwarded to our '80.dap.test' 
 container. Great!
 
 To show all defined forwards:
@@ -130,29 +134,21 @@ To show all defined forwards:
 netsh interface portproxy show v4tov4
 ```
 
-If you know how to do this in different Linux distributions, let me know :). 
-
 #### Running web application using HTTPS
 All containers come with a self-signed certificate already included and configured with Apache.
-To run a web app using HTTPS, you can simply use the "https://" scheme with the address, and then specify the correct 
-port for the specific container, like this:
+To run a web app using HTTPS, you can simply use the "https://" scheme with the host 'localhost',
+and then specify the correct port for the specific container, like this:
+* https://localhost:9074
+* https://localhost:9080
 
-* https://56.dap.test:9056
-* https://70.dap.test:9070
-* https://71.dap.test:9071
-* https://72.dap.test:9072
-* https://73.dap.test:9073
-* https://74.dap.test:9074
-* https://80.dap.test:9080
+When using HTTPS on host 'locahost', a self-signed certificate will be used, so you'll get a warning about that
+from your browsers.
 
-If you don't want to designate the port each time, you can, again, specify correct port forwarding for port 443, 
-like this:
-
-```shell
-netsh interface portproxy add v4tov4 listenport=443 listenaddress=127.0.0.72 connectport=9072 connectaddress=127.0.0.1
-```
-
-Now we can access our web app over HTTPS by entering the address without port: 'https://72.dap.test'
+If you need a real certificate, you can use host 'locahost.markoivancic.from.hr' to access specific container
+(domain locahost.markoivancic.from.hr points to IP 127.0.0.1):
+* https://locahost.markoivancic.from.hr:9074
+* https://locahost.markoivancic.from.hr:9080
+* ...
 
 ### OpenLDAP
 

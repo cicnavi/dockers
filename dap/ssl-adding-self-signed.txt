@@ -1,7 +1,7 @@
-Starting form dockers 73.dap.test and onward we have prepared a localhost which can be accessed using HTTPS
+Starting form dockers 74.dap.test and onward we have prepared a localhost which can be accessed using HTTPS
 The URLs are
-* https://localhost:9073
 * https://localhost:9074
+* https://localhost:9080
 * ...
 
 If you don't want to use localhost, here is how you can enable you own self-signed cert / domain.
@@ -11,7 +11,7 @@ to your hosts file, and than follow the procedure to create your own virtual hos
 The following commands are reminder on how the key and cert were generated:
 $ docker exec -it *.dap.test bash
 $ cd /etc/apache2/config-from-host/
-$ mkdir ssl
+$ mkdir -p ssl
 $ openssl req -x509 -nodes -days 10000 -newkey rsa:2048 -keyout ./ssl/server.key -out ./ssl/server.crt
 $ openssl dhparam -out ./ssl/dhparam.pem 2048
 $ nano ssl-params.conf

@@ -1,8 +1,5 @@
 FROM php:5.6-apache-jessie
 
-# Use default php.ini (it is development version).
-COPY php-config/php.ini /usr/local/etc/php/
-
 # Setup bare-minimum extra extensions for Laravel & others
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
         libfreetype6-dev \
@@ -74,3 +71,6 @@ RUN usermod -u 1000 www-data \
 
 # Set timezone
 RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
+
+# Use default php.ini (it is development version).
+COPY 56/php-config/php.ini /usr/local/etc/php/

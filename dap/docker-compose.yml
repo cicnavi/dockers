@@ -13,8 +13,9 @@ services:
             - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
             - "./80/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./80/html:/var/www/html" # Public directory, change local path as needed.
-            - "./80/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
-            - "./shared:/var/www/shared" # Shared directory between containers.
+            - "./80/apache-config:/etc/apache2/config-from-host" # Apache configuration to include.
+            - "./shared/apache-config:/etc/apache2/shared-config-from-host" # Optional Apache configuration to include.
+            - "./shared/data:/var/data" # Shared directory between containers.
 
     74.dap.test:
         image: cicnavi/dap:74
@@ -29,72 +30,11 @@ services:
             - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
             - "./74/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./74/html:/var/www/html" # Public directory, change local path as needed.
-            - "./74/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
-            - "./shared:/var/www/shared" # Shared directory between containers.
-
-    73.dap.test:
-        image: cicnavi/dap:73
-        container_name: 73.dap.test
-#        restart: unless-stopped
-        ports:
-        - "8073:80" # web
-        - "9073:443" # tls
-        volumes:
-            - ~/.composer:/root/.composer # Use for composer caching
-#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
-            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
-            - "./73/src:/var/www/src" # Directory for all apps, change local path as needed.
-            - "./73/html:/var/www/html" # Public directory, change local path as needed.
-            - "./73/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
-            - "./shared:/var/www/shared" # Shared directory between containers.
-
-    72.dap.test:
-        image: cicnavi/dap:72
-        container_name: 72.dap.test
-#        restart: unless-stopped
-        ports:
-        - "8072:80" # web
-        - "9072:443" # tls
-        volumes:
-            - ~/.composer:/root/.composer # Use for composer caching
-#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
-            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
-            - "./72/src:/var/www/src" # Directory for all apps, change local path as needed.
-            - "./72/html:/var/www/html" # Public directory, change local path as needed.
-            - "./72/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
-            - "./shared:/var/www/shared" # Shared directory between containers.
-
-    71.dap.test:
-        image: cicnavi/dap:71
-        container_name: 71.dap.test
-#        restart: unless-stopped
-        ports:
-        - "8071:80" # web
-        - "9071:443" # tls
-        volumes:
-            - ~/.composer:/root/.composer # Use for composer caching
-#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
-            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
-            - "./71/src:/var/www/src" # Directory for all apps, change local path as needed.
-            - "./71/html:/var/www/html" # Public directory, change local path as needed.
-            - "./71/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
-            - "./shared:/var/www/shared" # Shared directory between containers.
-            
-    70.dap.test:
-        image: cicnavi/dap:70
-        container_name: 70.dap.test
-#        restart: unless-stopped
-        ports:
-        - "8070:80" # web
-        - "9070:443" # tls
-        volumes:
-            - ~/.composer:/root/.composer # Use for composer caching
-#            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
-            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
-            - "./70/src:/var/www/src" # Directory for all apps, change local path as needed.
-            - "./70/html:/var/www/html" # Public directory, change local path as needed.
-            - "./70/apache-config:/etc/apache2/config-from-host" # Optional Apache configuration to include.
-            - "./shared:/var/www/shared" # Shared directory between containers.
+            - "./74/apache-config:/etc/apache2/config-from-host" # Apache configuration to include.
+            - "./shared/apache-config:/etc/apache2/shared-config-from-host" # Shared Apache configuration to include.
+            - "./shared/data:/var/data" # Shared directory between containers.
+            - "./shared/scripts:/var/scripts" # Shared directory between containers.
+            - "./shared/src:/var/www/shared/src" # Shared directory between containers.
     
     56.dap.test:
         image: cicnavi/dap:56
