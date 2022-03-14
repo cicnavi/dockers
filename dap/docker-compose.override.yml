@@ -1,9 +1,16 @@
 version: '2'
 services:
+    08.dap.test:
+        depends_on:
+            - mysql8.dap.test
     80.dap.test:
         depends_on:
             - mysql8.dap.test
 
     74.dap.test:
+        depends_on:
+            - mysql.dap.test
+
+    73.dap.test:
         depends_on:
             - mysql.dap.test

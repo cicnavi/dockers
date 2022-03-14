@@ -1,5 +1,22 @@
 version: '2'
 services:
+    08.dap.test:
+        image: cicnavi/dap:08
+        container_name: 08.dap.test
+        #        restart: unless-stopped
+        ports:
+            - "8008:80" # web
+            - "9008:443" # tls
+        volumes:
+            - ~/.composer:/root/.composer # Use for composer caching
+            #- ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
+            - "./08/src:/var/www/src" # Directory for all apps, change local path as needed.
+            - "./08/html:/var/www/html" # Public directory, change local path as needed.
+            - "./08/apache-config:/etc/apache2/config-from-host" # Apache configuration to include.
+            - "./shared/apache-config:/etc/apache2/shared-config-from-host" # Optional Apache configuration to include.
+            - "./shared/data:/var/data" # Shared directory between containers.
+
     80.dap.test:
         image: cicnavi/dap:80
         container_name: 80.dap.test
@@ -9,7 +26,7 @@ services:
             - "9080:443" # tls
         volumes:
             - ~/.composer:/root/.composer # Use for composer caching
-            #            - ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+            #- ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
             - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
             - "./80/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./80/html:/var/www/html" # Public directory, change local path as needed.

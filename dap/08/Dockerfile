@@ -1,4 +1,4 @@
-FROM php:8.0-apache
+FROM php:8-apache
 
 # Use the default development php.ini configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
@@ -86,12 +86,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
 	&& docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
 	&& docker-php-ext-install -j$(nproc) $phpModules \
-	&& pecl install xdebug-3.0.0 \
+	&& pecl install xdebug-3.1.3 \
 	&& pecl install memcached-3.1.5 \
-	&& pecl install redis-5.3.2 \
-	&& pecl install apcu-5.1.19 \
-	&& pecl install igbinary-3.1.6 \
-	&& pecl install mongodb-1.9.0 \
+	&& pecl install redis-5.3.7 \
+	&& pecl install apcu-5.1.21 \
+	&& pecl install igbinary-3.2.7 \
+	&& pecl install mongodb-1.12.1 \
 	&& docker-php-ext-enable xdebug memcached redis apcu igbinary mongodb \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

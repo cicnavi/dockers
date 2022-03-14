@@ -7,6 +7,13 @@ versions of PHP available, and also with tools like composer, phpunit, psalm, ph
 ## Available containers
 
 - DAP (Debian Apache PHP), references MySQL
+  - 56.dap.test - PHP v5.6.*
+  - 74.dap.test - PHP v7.4.*
+  - 80.dap.test - PHP v8.0.*
+  - 08.dap.test - Latest PHP v8.*
+- MySQL
+  - mysql.dap.test - MySQL v5.7.*
+  - mysql8.dap.test - MySQL v8.* 
 - OpenLDAP and phpLDAPadmin (pure osixia/openldap, no customizations)
 
 ## Run containers
@@ -62,14 +69,15 @@ Inside 'dap' folder, there is one folder for each PHP version. For each PHP vers
 configuration. 
 
 Apache configuration can be set by creating files ending in '.conf' in 'apache-config' folder.
+In 'dap' folder you will find 'shared/src' folder, which can be used to share apache config across all containers.
 
-PHP configuration can be set in 'php.ini' file which is available in 'php-config' folder.
+Custom PHP configuration can be set in 'ini' files in 'php-config' folder.
 
 #### Setting source files for your web application
-In 'dap' folder you will find 'shared/src' folder. Also, in each PHP version folder, 
-you will find folders 'src' and 'html'.
-Folder 'src' can contain source files which should be available to only one specific container or to all containers
-if you use 'shared/src' folder. 
+In each PHP version folder you will find folders 'src' and 'html'.
+
+Folder 'src' can contain source files which should be available to only one specific container.
+You can use use 'shared/src' folder to make it available to all containers 
 
 The 'html' folder should contain files which will be served publicly by the Apache web server. 
 By default, in 'html' folder you'll find 'index.php' file which will dump PHP information.
@@ -125,7 +133,7 @@ On Windows OS, we can enter the following command to specify port forwarding:
 ```shell
 netsh interface portproxy add v4tov4 listenport=80 listenaddress=127.0.0.80 connectport=8080 connectaddress=127.0.0.1
 ```
-Once we do that, we can enter the URL 'http://72.dap.test' and our request will be forwarded to our '80.dap.test' 
+Once we do that, we can enter the URL 'http://80.dap.test' and our request will be forwarded to our '80.dap.test' 
 container. Great!
 
 To show all defined forwards:
@@ -141,7 +149,7 @@ and then specify the correct port for the specific container, like this:
 * https://localhost:9074
 * https://localhost:9080
 
-When using HTTPS on host 'locahost', a self-signed certificate will be used, so you'll get a warning about that
+When using HTTPS on host 'localhost', a self-signed certificate will be used, so you'll get a warning about that
 from your browsers.
 
 If you need a real certificate, you can use host 'locahost.markoivancic.from.hr' to access specific container

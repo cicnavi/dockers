@@ -44,6 +44,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 		unzip \
 		libonig-dev \
 		libldap2-dev \
+		mariadb-client \
 	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache mbstring curl json xml bz2 soap gmp \
 	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
 	&& docker-php-ext-install -j$(nproc) gd \

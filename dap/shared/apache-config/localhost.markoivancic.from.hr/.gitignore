@@ -1,0 +1,7 @@
+
+# Ignore this...
+/*
+
+# but not this...
+!.gitignore
+!README.md
