@@ -81,10 +81,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
                 tidy \
                 xsl \
                 zip \
+                pcntl \
             " \
 	&& docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp \
 	&& docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
 	&& docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+	&& docker-php-ext-configure pcntl --enable-pcntl \
 	&& docker-php-ext-install -j$(nproc) $phpModules \
 	&& pecl install xdebug-3.0.0 \
 	&& pecl install memcached-3.1.5 \
@@ -106,6 +108,10 @@ ENV PATH $PATH:/composer/vendor/bin
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
+# Set allowed plugins
+RUN composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+
+#11 1.838   /phpcodesniffer-composer-installer [true|false]
 # Install code quality tools
 RUN composer global require "squizlabs/php_codesniffer=*"
 RUN composer global require "pheromone/phpcs-security-audit=*"

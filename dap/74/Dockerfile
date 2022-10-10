@@ -50,9 +50,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& docker-php-ext-install -j$(nproc) gd \
 	&& docker-php-ext-configure intl \
 	&& docker-php-ext-install -j$(nproc) intl \
-	&& docker-php-ext-configure ldap \
-		--with-libdir=lib/x86_64-linux-gnu/ \
+	&& docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
     && docker-php-ext-install -j$(nproc) ldap \
+	&& docker-php-ext-configure pcntl --enable-pcntl \
+    && docker-php-ext-install -j$(nproc) pcntl \
 	&& pecl install xdebug-2.9.2 \
 	&& pecl install memcached-3.1.4 \
 	&& pecl install redis-5.1.1 \
@@ -65,6 +66,9 @@ ENV COMPOSER_HOME /composer
 ENV PATH $PATH:/composer/vendor/bin
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
+
+# Set allowed plugins
+RUN composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
 
 # Install code quality tools
 RUN composer global require "squizlabs/php_codesniffer=*"
