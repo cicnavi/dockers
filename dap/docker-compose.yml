@@ -14,6 +14,7 @@ services:
             - "./08/src:/var/www/src" # Directory for all apps, change local path as needed.
             - "./08/html:/var/www/html" # Public directory, change local path as needed.
             - "./08/apache-config:/etc/apache2/config-from-host" # Apache configuration to include.
+            - "./08/php-config/from-host:/usr/local/etc/php/conf.d/from-host" # Apache configuration to include.
             - "./shared/apache-config:/etc/apache2/shared-config-from-host" # Optional Apache configuration to include.
             - "./shared/data:/var/data" # Shared directory between containers.
 

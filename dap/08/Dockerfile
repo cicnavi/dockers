@@ -1,11 +1,12 @@
-FROM php:8-apache
+FROM --platform=linux/amd64 php:8-apache
 
 # Use the default development php.ini configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # Setup bare-minimum extra extensions for Laravel & others
-RUN DEBIAN_FRONTEND=noninteractive apt-get update \
-	&& apt-get install -y --no-install-recommends \
+RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
+    && apt-get update \
+	&& apt-get install -y --no-install-recommends --fix-missing \
 #	    apt-utils \
 		libmemcached-dev  \
 		libfreetype6-dev \
@@ -94,7 +95,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& pecl install apcu-5.1.21 \
 	&& pecl install igbinary-3.2.7 \
 	&& pecl install mongodb-1.12.1 \
-	&& docker-php-ext-enable xdebug memcached redis apcu igbinary mongodb \
+	&& pecl install pcov-1.0.11 \
+	&& docker-php-ext-enable xdebug memcached redis apcu igbinary mongodb pcov \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -102,10 +104,18 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 #RUN pecl install amqp-1.6.0 \
 #	&& docker-php-ext-enable amqp \
 
+# Create required custom directories
+RUN mkdir -p $PHP_INI_DIR/conf.d/custom \
+    && mkdir -p $PHP_INI_DIR/conf.d/from-host \
+    && mkdir -p /var/www/src \
+    && mkdir -p /etc/apache2/config-from-host \
+    && mkdir -p /etc/apache2/shared-config-from-host
+
 # Install composer and update path
 ENV COMPOSER_HOME /composer
 ENV PATH $PATH:/composer/vendor/bin
 ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV PHP_INI_SCAN_DIR ":$PHP_INI_DIR/conf.d/custom:$PHP_INI_DIR/conf.d/from-host"
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
 # Set allowed plugins
@@ -149,9 +159,6 @@ RUN rm -f /opt/${SONAR_SCANNER_FILENAME} \
 # Enable Apache mod_rewrite.
 RUN a2enmod rewrite ssl headers proxy proxy_http
 
-# Create required custom directories
-RUN mkdir -p /var/www/src /etc/apache2/config-from-host /etc/apache2/shared-config-from-host
-
 # Set global ServerName directive
 RUN echo "" >> /etc/apache2/apache2.conf \
     && echo "# Global server name directive" >> /etc/apache2/apache2.conf \
@@ -174,7 +181,7 @@ RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
 COPY shared/scripts /var/scripts
 RUN chmod a+x /var/scripts/*
 # Copy custom config to PHP config dir.
-COPY 80/php-config/custom.ini "$PHP_INI_DIR/conf.d/"
+COPY 08/php-config/custom.ini "$PHP_INI_DIR/conf.d/custom"
 
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data \

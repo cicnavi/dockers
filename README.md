@@ -77,7 +77,7 @@ Custom PHP configuration can be set in 'ini' files in 'php-config' folder.
 In each PHP version folder you will find folders 'src' and 'html'.
 
 Folder 'src' can contain source files which should be available to only one specific container.
-You can use use 'shared/src' folder to make it available to all containers 
+You can use 'shared/src' folder to make it available to all containers 
 
 The 'html' folder should contain files which will be served publicly by the Apache web server. 
 By default, in 'html' folder you'll find 'index.php' file which will dump PHP information.

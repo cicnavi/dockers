@@ -56,7 +56,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     && docker-php-ext-install -j$(nproc) pcntl \
 	&& pecl install xdebug-2.9.2 \
 	&& pecl install memcached-3.1.4 \
-	&& pecl install redis-5.1.1 \
+	&& pecl install redis-5.3.7 \
 	&& docker-php-ext-enable xdebug memcached redis \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

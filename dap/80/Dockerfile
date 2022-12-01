@@ -90,7 +90,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& docker-php-ext-install -j$(nproc) $phpModules \
 	&& pecl install xdebug-3.0.0 \
 	&& pecl install memcached-3.1.5 \
-	&& pecl install redis-5.3.2 \
+	&& pecl install redis-5.3.7 \
 	&& pecl install apcu-5.1.19 \
 	&& pecl install igbinary-3.1.6 \
 	&& pecl install mongodb-1.9.0 \

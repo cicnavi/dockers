@@ -61,3 +61,9 @@ services:
             file: openldap/docker-compose.yml
         depends_on:
           - openldap
+
+    redis7:
+        restart: 'no'
+        extends:
+            service: redis7
+            file: redis7/docker-compose.yml
