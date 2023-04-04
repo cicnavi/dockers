@@ -89,13 +89,13 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
 	&& docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
 	&& docker-php-ext-configure pcntl --enable-pcntl \
 	&& docker-php-ext-install -j$(nproc) $phpModules \
-	&& pecl install xdebug-3.1.3 \
-	&& pecl install memcached-3.1.5 \
-	&& pecl install redis-5.3.7 \
-	&& pecl install apcu-5.1.21 \
-	&& pecl install igbinary-3.2.7 \
-	&& pecl install mongodb-1.12.1 \
-	&& pecl install pcov-1.0.11 \
+	&& pecl install xdebug \
+	&& pecl install memcached \
+	&& pecl install redis \
+	&& pecl install apcu \
+	&& pecl install igbinary \
+	&& pecl install mongodb \
+	&& pecl install pcov \
 	&& docker-php-ext-enable xdebug memcached redis apcu igbinary mongodb pcov \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -133,11 +133,11 @@ RUN composer global require "vimeo/psalm=*"
 RUN composer global require "phpunit/phpunit=*"
 
 # Local PHP Security Checker
-# https://github.com/fabpot/local-php-security-checker/releases/download/v1.2.0/local-php-security-checker_1.2.0_linux_amd64
+# https://github.com/fabpot/local-php-security-checker/releases/download/v2.0.6/local-php-security-checker_2.0.6_linux_amd64
 ENV PATH $PATH:/opt/local-php-security-checker
 RUN rm -f /opt/local-php-security-checker/* \
     && mkdir -p /opt/local-php-security-checker \
-    && wget https://github.com/fabpot/local-php-security-checker/releases/download/v1.2.0/local-php-security-checker_1.2.0_linux_amd64 -O /opt/local-php-security-checker/local-php-security-checker \
+    && wget https://github.com/fabpot/local-php-security-checker/releases/download/v2.0.6/local-php-security-checker_2.0.6_linux_amd64 -O /opt/local-php-security-checker/local-php-security-checker \
     && chmod a+x /opt/local-php-security-checker/local-php-security-checker \
     && touch /etc/profile.d/local-php-security-checker.sh \
     # Make available for login shells
@@ -145,7 +145,7 @@ RUN rm -f /opt/local-php-security-checker/* \
 
 # Sonar Scanner installation
 ENV PATH $PATH:/opt/sonar-scanner/bin
-ENV SONAR_SCANNER_VERSION "4.7.0.2747-linux"
+ENV SONAR_SCANNER_VERSION "4.8.0.2856-linux"
 ENV SONAR_SCANNER_FILENAME "sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
 ENV SONAR_SCANNER_DL_URL "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli"
 RUN rm -f /opt/${SONAR_SCANNER_FILENAME} \
