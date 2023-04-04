@@ -9,7 +9,7 @@ versions of PHP available, and also with tools like composer, phpunit, psalm, ph
 - DAP (Debian Apache PHP), references MySQL
   - 56.dap.test - PHP v5.6.*
   - 74.dap.test - PHP v7.4.*
-  - 80.dap.test - PHP v8.0.*
+  - 81.dap.test - PHP v8.1.*
   - 08.dap.test - Latest PHP v8.*
 - MySQL
   - mysql.dap.test - MySQL v5.7.*
@@ -85,9 +85,9 @@ By default, in 'html' folder you'll find 'index.php' file which will dump PHP in
 When you put application source files in 'src' folder, you can enter the 'bash' in the container, and create a symlink 
 to the application source which will be served publicly (the same applies to 'shared' folder).
 
-For example, let's enter the 'bash' in '80.dap.test' container:
+For example, let's enter the 'bash' in '81.dap.test' container:
 ```shell
-docker exec -it 80.dap.test bash
+docker exec -it 81.dap.test bash
 ```
 By default, you'll be positioned in '/var/www/html' folder. Here you can create a symlink to a source file or folder 
 you wish to be served by Apache:
@@ -99,13 +99,13 @@ you should adjust symlinks to suit your needs.
 
 #### Running web application
 If you look at the 'docker-compose.yml' file, you'll find port specifications for different containers. By default, 
-container which has PHP version 7.4 will use port 8074. Container with PHP version 8.0 will use port 8080, and so on.
+container which has PHP version 7.4 will use port 8074. Container with PHP version 8.1 will use port 8081, and so on.
 
 This means that we can now access our web application on localhost URL by specifying the right port for the container. 
-For example, since we deployed our app to container 80.dap.test, we can use port 8080 to open it in browser: 
-http://localhost:8080/some-php-app/.
+For example, since we deployed our app to container 81.dap.test, we can use port 8081 to open it in browser: 
+http://localhost:8081/some-php-app/.
 
-If you only enter http://localhost:8080, you'll get PHP info dump.
+If you only enter http://localhost:8081, you'll get PHP info dump.
 
 #### Specifying container host names and forwarding ports
 You can edit your hosts file and add host names for each container.
@@ -113,27 +113,27 @@ For example, you can add the following entries:
 ```
 127.0.0.56 56.dap.test
 127.0.0.74 74.dap.test
-127.0.0.80 80.dap.test
+127.0.0.81 81.dap.test
 127.0.0.100 mysql.dap.test
 ```
 Note that we specify different IP for a different host. This way you can enter URL for the container like this: 
-http://80.dap.test:8080. 
+http://81.dap.test:8081. 
 
 If we want to only enter hostname for the container, we can forward specific ports on specific 
 IP addresses, to other ports. 
 
 For example, we want to forward port 80 on specific IP address to 
 specific port used on the container. Let's do that for our 
-container '80.dap.test'. When we enter the URL http://80.dap.test, by default port 80 will be used and our request 
-will be forwarded to IP 127.0.0.80 (which we specified in hosts file). When that happens, we will forward that request 
-to port 8080 on IP 127.0.0.1, because on that port we have our '80.dap.test' container waiting for requests 
+container '81.dap.test'. When we enter the URL http://81.dap.test, by default port 80 will be used and our request 
+will be forwarded to IP 127.0.0.81 (which we specified in hosts file). When that happens, we will forward that request 
+to port 8081 on IP 127.0.0.1, because on that port we have our '81.dap.test' container waiting for requests 
 (this is defined in docker-compose.yml).
 
 On Windows OS, we can enter the following command to specify port forwarding:
 ```shell
-netsh interface portproxy add v4tov4 listenport=80 listenaddress=127.0.0.80 connectport=8080 connectaddress=127.0.0.1
+netsh interface portproxy add v4tov4 listenport=80 listenaddress=127.0.0.81 connectport=8081 connectaddress=127.0.0.1
 ```
-Once we do that, we can enter the URL 'http://80.dap.test' and our request will be forwarded to our '80.dap.test' 
+Once we do that, we can enter the URL 'http://81.dap.test' and our request will be forwarded to our '81.dap.test' 
 container. Great!
 
 To show all defined forwards:
@@ -147,7 +147,7 @@ All containers come with a self-signed certificate already included and configur
 To run a web app using HTTPS, you can simply use the "https://" scheme with the host 'localhost',
 and then specify the correct port for the specific container, like this:
 * https://localhost:9074
-* https://localhost:9080
+* https://localhost:9081
 
 When using HTTPS on host 'localhost', a self-signed certificate will be used, so you'll get a warning about that
 from your browsers.
@@ -155,7 +155,7 @@ from your browsers.
 If you need a real certificate, you can use host 'locahost.markoivancic.from.hr' to access specific container
 (domain locahost.markoivancic.from.hr points to IP 127.0.0.1):
 * https://locahost.markoivancic.from.hr:9074
-* https://locahost.markoivancic.from.hr:9080
+* https://locahost.markoivancic.from.hr:9081
 * ...
 
 ### OpenLDAP

@@ -3,7 +3,8 @@ services:
     08.dap.test:
         depends_on:
             - mysql8.dap.test
-    80.dap.test:
+
+    81.dap.test:
         depends_on:
             - mysql8.dap.test
 

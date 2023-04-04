@@ -18,6 +18,23 @@ services:
             - "./shared/apache-config:/etc/apache2/shared-config-from-host" # Optional Apache configuration to include.
             - "./shared/data:/var/data" # Shared directory between containers.
 
+    81.dap.test:
+        image: cicnavi/dap:81
+        container_name: 81.dap.test
+        #        restart: unless-stopped
+        ports:
+            - "8081:80" # web
+            - "9081:443" # tls
+        volumes:
+            - ~/.composer:/root/.composer # Use for composer caching
+            #- ~/.gitconfig:/root/.gitconfig # Git configuration ( access alias && config )
+            - ~/.ssh:/root/.ssh # Ssh keys for easy deployment inside the container
+            - "./81/src:/var/www/src" # Directory for all apps, change local path as needed.
+            - "./81/html:/var/www/html" # Public directory, change local path as needed.
+            - "./81/apache-config:/etc/apache2/config-from-host" # Apache configuration to include.
+            - "./shared/apache-config:/etc/apache2/shared-config-from-host" # Optional Apache configuration to include.
+            - "./shared/data:/var/data" # Shared directory between containers.
+
     80.dap.test:
         image: cicnavi/dap:80
         container_name: 80.dap.test
