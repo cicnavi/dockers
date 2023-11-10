@@ -4,7 +4,7 @@ set -e
 shopt -s extglob
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-MI_TAGS=( "56" "74" "80" "81" "08" )
+MI_TAGS=( "74" "80" "81" "08" )
 
 docker login
 
