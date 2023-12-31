@@ -3,9 +3,4 @@
 
 # ...except some files
 !.gitignore
-!README.md
 !*.conf-example
-!ssl
-!ssl/*
-!ssl-params.conf
-!default-ssl.conf

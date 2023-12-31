@@ -54,6 +54,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
 		librabbitmq-dev \
 		librabbitmq4 \
         mariadb-client \
+        openssh-client \
     && phpModules=" \
                 bcmath \
                 bz2 \
@@ -117,6 +118,7 @@ ENV PATH $PATH:/composer/vendor/bin
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV PHP_INI_SCAN_DIR ":$PHP_INI_DIR/conf.d/custom:$PHP_INI_DIR/conf.d/from-host"
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
+RUN chmod -R 777 /composer
 
 # Set allowed plugins
 RUN composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true

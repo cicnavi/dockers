@@ -1,20 +1,25 @@
+# TODO
+* install ssh client on all containers and suggest mount point for ssk keys
+* do not fail if wget can not download certs for markoivancic.from.hr 
+* add write rights for /composer cache path
+* move cert download in nginx using script
+
 # cicnavi Docker Containers
 
 These are LAMP (Linux, Apache, MySQL, PHP) oriented containers which I use in my day-to-day 
-development work. Main purpose is to have development environment available with different
-versions of PHP available, and also with tools like composer, phpunit, psalm, phpcs...
+development work. Main purpose is to have development environment with different
+versions of PHP together with tools like composer, phpunit, psalm, phpcs... In addition,
+typical services like databases are also available.
 
 ## Available containers
 
-- DAP (Debian Apache PHP), references MySQL
-  - 56.dap.test - PHP v5.6.*
-  - 74.dap.test - PHP v7.4.*
-  - 81.dap.test - PHP v8.1.*
-  - 08.dap.test - Latest PHP v8.*
-- MySQL
-  - mysql.dap.test - MySQL v5.7.*
-  - mysql8.dap.test - MySQL v8.* 
-- OpenLDAP and phpLDAPadmin (pure osixia/openldap, no customizations)
+- DAP (Debian Apache PHP) - follow the PHP version releases and have their names set corresponding the
+  PHP version, for example:
+    - 74.dap.test - PHP v7.4.*
+    - 82.dap.test - PHP v8.2.*
+    - ...
+    - 08.dap.test - Latest PHP v8.*
+- Databases, like MySQL, OpenLDAP, Redis...
 
 ## Run containers
 Clone the repo, for example:
@@ -23,22 +28,35 @@ Clone the repo, for example:
 git clone https://github.com/cicnavi/dockers.git dockers
 ```
 
-To run mentioned containers, go to 'dockers' directory:
+Go to 'dockers' directory:
 
 ```shell
 cd dockers
 ```
 
-Here you'll find a 'docker-compose.yml' file. This means you can use 'docker-compose' command 
-to easily run defined containers (you can edit that file to suit your needs if you wish):
+Fetch certs (or refresh them when they expire):
 
 ```shell
-docker-compose up -d
+./bin/refresh-certs.sh
 ```
 
-If you look at the 'dockers/docker-compose.yml' file, you'll notice that it actually extends other docker-compose.yml 
-files from 'dap' and 'openldap' directories. This way we have a separate configuration if we wish to run all containers, 
-or if we only wish to run 'DAP' containers, or if we only wish to run 'OpenLDAP' containers, etc.
+Copy .env.example to .env and edit .env appropriately (it holds environment variables used to run containers). 
+
+```shell
+cp .env.example .env
+```
+
+You can use 'docker compose' command to easily run defined containers in file 'compose.yml'. 
+
+```shell
+docker compose up -d
+```
+
+If needed, create a copy of compose.yml and edit it to suit your needs. Then you can run your custom compose.yml:
+
+```shell
+docker compose -f custom-compose.yml up -d
+```
 
 ### DAP (Debian Apache PHP) Containers
 
@@ -46,23 +64,8 @@ DAP containers are available with different PHP versions. Each folder in 'dap' f
 specific PHP version which is used in a container. So, with this approach we can easily run different containers 
 to test our web application on different PHP version.
 
-#### Running DAP containers
-Once you've cloned this repo, go to 'dap' directory:
-
-```shell
-cd dockers/dap
-```
-
-Here you'll find a 'docker-compose.yml' file. This means you can use 'docker-compose' command to easily run defined 
-containers (you can edit that file to suit your needs if you wish):
-
-```shell
-docker-compose up -d
-```
-
-If you look at the 'docker-compose.yml' file, you'll notice that besides DAP containers, it will also run a MySQL 
-container. This is because I often use MySQL as a database, so this way I have it available instantly. Feel free to 
-delete MySQL part if you don't plan to use it in your work.
+If you look at the 'compose.yml' file, you'll notice that besides DAP containers, it will also run database 
+containers, like MySQL, Redis... 
 
 #### Configuring Apache and PHP
 Inside 'dap' folder, there is one folder for each PHP version. For each PHP version we can set custom Apache and PHP 
@@ -86,77 +89,48 @@ When you put application source files in 'src' folder, you can enter the 'bash' 
 to the application source which will be served publicly (the same applies to 'shared' folder).
 
 For example, let's enter the 'bash' in '81.dap.test' container:
+
 ```shell
-docker exec -it 81.dap.test bash
+docker exec -it 08.dap.test bash
 ```
+
 By default, you'll be positioned in '/var/www/html' folder. Here you can create a symlink to a source file or folder 
 you wish to be served by Apache:
+
 ```shell
 ln -s ../src/some-php-app/public some-php-app
 ```
+
 This will create a symbolic link 'some-php-app' which will point to 'public' folder of our PHP application. Of course, 
 you should adjust symlinks to suit your needs.
 
 #### Running web application
-If you look at the 'docker-compose.yml' file, you'll find port specifications for different containers. By default, 
-container which has PHP version 7.4 will use port 8074. Container with PHP version 8.1 will use port 8081, and so on.
+If you look at the 'compose.yml' file, you'll note that nginx reverse proxy is used in front of all DAP containers.
+Each container has several virtual hosts appointed which can then be used to access specific container. By default,
+everything is configured around a wildcard domain '*.localhost.markoivancic.form.hr', which has a real certificate
+available.
 
-This means that we can now access our web application on localhost URL by specifying the right port for the container. 
-For example, since we deployed our app to container 81.dap.test, we can use port 8081 to open it in browser: 
-http://localhost:8081/some-php-app/.
+For example, container 08.dap.test has a virtual host '08-dap.localhost.markoivancic.from.hr' set. That means we can
+access our web application on a URL:
 
-If you only enter http://localhost:8081, you'll get PHP info dump.
+https://08-dap.localhost.markoivancic.form.hr/some-php-app/.
+
+If you only enter https://08-dap.localhost.markoivancic.form.hr, you'll get PHP info dump.
 
 #### Specifying container host names and forwarding ports
 You can edit your hosts file and add host names for each container.
 For example, you can add the following entries:
+
 ```
-127.0.0.56 56.dap.test
-127.0.0.74 74.dap.test
-127.0.0.81 81.dap.test
-127.0.0.100 mysql.dap.test
-```
-Note that we specify different IP for a different host. This way you can enter URL for the container like this: 
-http://81.dap.test:8081. 
-
-If we want to only enter hostname for the container, we can forward specific ports on specific 
-IP addresses, to other ports. 
-
-For example, we want to forward port 80 on specific IP address to 
-specific port used on the container. Let's do that for our 
-container '81.dap.test'. When we enter the URL http://81.dap.test, by default port 80 will be used and our request 
-will be forwarded to IP 127.0.0.81 (which we specified in hosts file). When that happens, we will forward that request 
-to port 8081 on IP 127.0.0.1, because on that port we have our '81.dap.test' container waiting for requests 
-(this is defined in docker-compose.yml).
-
-On Windows OS, we can enter the following command to specify port forwarding:
-```shell
-netsh interface portproxy add v4tov4 listenport=80 listenaddress=127.0.0.81 connectport=8081 connectaddress=127.0.0.1
-```
-Once we do that, we can enter the URL 'http://81.dap.test' and our request will be forwarded to our '81.dap.test' 
-container. Great!
-
-To show all defined forwards:
-
-```shell
-netsh interface portproxy show v4tov4
+127.0.0.1 74.dap.test
+...
+127.0.0.1 08.dap.test
+127.0.0.1 mysql.dap.test
 ```
 
-#### Running web application using HTTPS
-All containers come with a self-signed certificate already included and configured with Apache.
-To run a web app using HTTPS, you can simply use the "https://" scheme with the host 'localhost',
-and then specify the correct port for the specific container, like this:
-* https://localhost:9074
-* https://localhost:9081
+This way you can enter URL for the container like this: 
 
-When using HTTPS on host 'localhost', a self-signed certificate will be used, so you'll get a warning about that
-from your browsers.
-
-If you need a real certificate, you can use host 'locahost.markoivancic.from.hr' to access specific container
-(domain locahost.markoivancic.from.hr points to IP 127.0.0.1):
-* https://locahost.markoivancic.from.hr:9074
-* https://locahost.markoivancic.from.hr:9081
-* ...
+http://08.dap.test 
 
 ### OpenLDAP
 

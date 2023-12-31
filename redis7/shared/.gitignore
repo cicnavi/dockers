@@ -3,4 +3,3 @@
 
 # ...except some files
 !.gitignore
-!*.conf-example

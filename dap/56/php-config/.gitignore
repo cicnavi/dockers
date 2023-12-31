@@ -3,4 +3,8 @@
 
 # ...except some files
 !.gitignore
-!*.conf-example
+!custom.ini
+!php.ini
+!php.ini-development
+!php.ini-production
+!README.md

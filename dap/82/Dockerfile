@@ -1,4 +1,4 @@
-FROM php:8.0-apache
+FROM php:8.2-apache
 
 # Use the default development php.ini configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
@@ -89,12 +89,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
 	&& docker-php-ext-configure pcntl --enable-pcntl \
 	&& docker-php-ext-install -j$(nproc) $phpModules \
-	&& pecl install xdebug-3.0.0 \
-	&& pecl install memcached-3.1.5 \
-	&& pecl install redis-5.3.7 \
-	&& pecl install apcu-5.1.19 \
-	&& pecl install igbinary-3.1.6 \
-	&& pecl install mongodb-1.9.0 \
+	&& pecl install xdebug-3.3.1 \
+	&& pecl install memcached-3.2.0 \
+	&& pecl install redis-6.0.2 \
+	&& pecl install apcu-5.1.23 \
+	&& pecl install igbinary-3.2.25 \
+	&& pecl install mongodb-1.17.2 \
 	&& docker-php-ext-enable xdebug memcached redis apcu igbinary mongodb \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -126,11 +126,11 @@ RUN composer global require "vimeo/psalm=*"
 RUN composer global require "phpunit/phpunit=*"
 
 # Local PHP Security Checker
-# https://github.com/fabpot/local-php-security-checker/releases/download/v1.2.0/local-php-security-checker_1.2.0_linux_amd64
+# https://github.com/fabpot/local-php-security-checker/releases/download/v2.0.6/local-php-security-checker_2.0.6_linux_amd64
 ENV PATH $PATH:/opt/local-php-security-checker
 RUN rm -f /opt/local-php-security-checker/* \
     && mkdir -p /opt/local-php-security-checker \
-    && wget https://github.com/fabpot/local-php-security-checker/releases/download/v1.2.0/local-php-security-checker_1.2.0_linux_amd64 -O /opt/local-php-security-checker/local-php-security-checker \
+    && wget https://github.com/fabpot/local-php-security-checker/releases/download/v2.0.6/local-php-security-checker_2.0.6_linux_amd64 -O /opt/local-php-security-checker/local-php-security-checker \
     && chmod a+x /opt/local-php-security-checker/local-php-security-checker \
     && touch /etc/profile.d/local-php-security-checker.sh \
     # Make available for login shells
@@ -138,7 +138,7 @@ RUN rm -f /opt/local-php-security-checker/* \
 
 # Sonar Scanner installation
 ENV PATH $PATH:/opt/sonar-scanner/bin
-ENV SONAR_SCANNER_VERSION "4.7.0.2747-linux"
+ENV SONAR_SCANNER_VERSION "4.8.0.2856-linux"
 ENV SONAR_SCANNER_FILENAME "sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
 ENV SONAR_SCANNER_DL_URL "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli"
 RUN rm -f /opt/${SONAR_SCANNER_FILENAME} \
@@ -177,7 +177,7 @@ RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
 COPY shared/scripts /var/scripts
 RUN chmod a+x /var/scripts/*
 # Copy custom config to PHP config dir.
-COPY 80/php-config/custom.ini "$PHP_INI_DIR/conf.d/"
+COPY 82/php-config/custom.ini "$PHP_INI_DIR/conf.d/"
 
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data \

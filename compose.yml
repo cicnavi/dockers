@@ -1,0 +1,146 @@
+services:
+    nginx-proxy:
+        restart: always
+        image: nginxproxy/nginx-proxy:latest
+        ports:
+            - 80:80
+            - 443:443
+        environment:
+            DEFAULT_HOST: localhost.markoivancic.from.hr
+        volumes:
+            - ./nginx-proxy/certs:/etc/nginx/certs
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+
+    08.dap.test:
+        image: cicnavi/dap:08
+        container_name: 08.dap.test
+        restart: unless-stopped
+        expose:
+            - 80
+            - 443
+        user: ${CONTAINER_USER_ID}
+        environment:
+            VIRTUAL_HOST: >-
+                08.dap.test,
+                *.08.dap.test,
+                localhost.markoivancic.from.hr,
+                latest-dap.localhost.markoivancic.from.hr,
+                ~^.+-latest-dap\.localhost\.markoivancic\.from\.hr$,
+                08-dap.localhost.markoivancic.from.hr,
+                ~^.+-08-dap\.localhost\.markoivancic\.from\.hr$
+            CERT_NAME: localhost.markoivancic.from.hr
+            HTTPS_METHOD: noredirect
+        volumes:
+            #- ~/.ssh:~/.ssh # SSH keys for easy deployment inside the container
+            - ~/projects:/var/www/projects # Directory for all apps, change local path as needed.
+            - ./mounts/html:/var/www/html # Public directory, change local path as needed.
+            - ./dap/08/apache-config:/etc/apache2/config-from-host # Apache configuration to include.
+            - ./dap/08/php-config:/usr/local/etc/php/conf.d/from-host # PHP configuration to include.
+            #- ./dap/shared/apache-config:/etc/apache2/shared-config-from-host # Shared Apache configuration to include.
+            #- ./dap/shared/data:/var/data # Shared directory between containers.
+        depends_on:
+            - mysql.dap.test
+
+    82.dap.test:
+        image: cicnavi/dap:82
+        container_name: 82.dap.test
+        restart: unless-stopped
+        expose:
+            - 80
+            - 443
+        user: ${CONTAINER_USER_ID}
+        environment:
+            VIRTUAL_HOST: >-
+                82.dap.test,
+                *.82.dap.test,
+                82-dap.localhost.markoivancic.from.hr,
+                ~^.+-82-dap\.localhost\.markoivancic\.from\.hr$
+            CERT_NAME: localhost.markoivancic.from.hr
+            HTTPS_METHOD: noredirect
+        volumes:
+            - ~/projects:/var/www/projects # Directory for all apps, change local path as needed.
+            - ./mounts/html:/var/www/html # Public directory, change local path as needed.
+            - ./dap/82/apache-config:/etc/apache2/config-from-host # Apache configuration to include.
+            - ./dap/82/php-config:/usr/local/etc/php/conf.d/from-host # PHP configuration to include.
+        depends_on:
+            - mysql.dap.test
+
+    81.dap.test:
+        image: cicnavi/dap:81
+        container_name: 81.dap.test
+        restart: unless-stopped
+        expose:
+            - 80
+            - 443
+        user: ${CONTAINER_USER_ID}
+        environment:
+            VIRTUAL_HOST: >-
+                81.dap.test,
+                *.81.dap.test,
+                81-dap.localhost.markoivancic.from.hr,
+                ~^.+-81-dap\.localhost\.markoivancic\.from\.hr$
+            CERT_NAME: localhost.markoivancic.from.hr
+            HTTPS_METHOD: noredirect
+        volumes:
+            - ~/projects:/var/www/projects # Directory for all apps, change local path as needed.
+            - ./mounts/html:/var/www/html # Public directory, change local path as needed.
+            - ./dap/81/apache-config:/etc/apache2/config-from-host # Apache configuration to include.
+            - ./dap/81/php-config:/usr/local/etc/php/conf.d/from-host # PHP configuration to include.
+        depends_on:
+            - mysql.dap.test
+
+    74.dap.test:
+        image: cicnavi/dap:74
+        container_name: 74.dap.test
+        restart: unless-stopped
+        expose:
+            - 80
+            - 443
+        user: ${CONTAINER_USER_ID}
+        environment:
+            VIRTUAL_HOST: >-
+                74.dap.test,
+                *.74.dap.test,
+                74-dap.localhost.markoivancic.from.hr,
+                ~^.+-74-dap\.localhost\.markoivancic\.from\.hr$
+            CERT_NAME: localhost.markoivancic.from.hr
+            HTTPS_METHOD: noredirect
+        volumes:
+            - ~/projects:/var/www/projects # Directory for all apps, change local path as needed.
+            - ./mounts/html:/var/www/html # Public directory, change local path as needed.
+            - ./dap/74/apache-config:/etc/apache2/config-from-host # Apache configuration to include.
+            - ./dap/74/php-config:/usr/local/etc/php/conf.d/from-host # PHP configuration to include.
+        depends_on:
+            - mysql.dap.test
+
+    mysql.dap.test:
+        restart: 'no'
+        extends:
+            service: mysql.dap.test
+            file: mysql/compose.yml
+
+    mysql8.dap.test:
+        restart: 'no'
+        extends:
+            service: mysql8.dap.test
+            file: mysql/compose.yml
+
+    openldap:
+        restart: 'no'
+        extends:
+            service: openldap
+            file: openldap/compose.yml
+
+    phpldapadmin:
+        restart: 'no'
+        extends:
+            service: phpldapadmin
+            file: openldap/compose.yml
+        depends_on:
+            - openldap
+
+    redis7:
+        restart: 'no'
+        extends:
+            service: redis7
+            file: redis7/compose.yml
