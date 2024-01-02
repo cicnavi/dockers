@@ -7,7 +7,6 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
     && apt-get update \
 	&& apt-get install -y --no-install-recommends --fix-missing \
-#	    apt-utils \
 		libmemcached-dev  \
 		libfreetype6-dev \
 		libxml2-dev \
@@ -54,6 +53,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
 		librabbitmq-dev \
 		librabbitmq4 \
         mariadb-client \
+        openssh-client \
     && phpModules=" \
                 bcmath \
                 bz2 \
@@ -67,7 +67,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
                 ldap \
                 mysqli \
                 opcache \
-                pcntl \
                 pdo_mysql \
                 pdo_pgsql \
                 pgsql \
@@ -88,15 +87,17 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
 	&& docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
 	&& docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
 	&& docker-php-ext-configure pcntl --enable-pcntl \
-	&& docker-php-ext-install -j$(nproc) $phpModules \
-	&& pecl install xdebug \
-	&& pecl install memcached \
-	&& pecl install redis \
-	&& pecl install apcu \
+	&& docker-php-ext-install -j$(nproc) $phpModules
+
+RUN pecl channel-update pecl.php.net \
+    && pecl install apcu \
 	&& pecl install igbinary \
+	&& pecl install memcached \
 	&& pecl install mongodb \
 	&& pecl install pcov \
-	&& docker-php-ext-enable xdebug memcached redis apcu igbinary mongodb pcov \
+	&& pecl install redis \
+    && pecl install xdebug \
+	&& docker-php-ext-enable xdebug igbinary memcached redis apcu mongodb pcov \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -117,6 +118,7 @@ ENV PATH $PATH:/composer/vendor/bin
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV PHP_INI_SCAN_DIR ":$PHP_INI_DIR/conf.d/custom:$PHP_INI_DIR/conf.d/from-host"
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
+RUN chmod -R 777 /composer
 
 # Set allowed plugins
 RUN composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
@@ -177,14 +179,6 @@ RUN echo "" >> /etc/apache2/apache2.conf \
 # Set timezone
 RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
 
-# Copy some required files to container
-COPY shared/scripts /var/scripts
-RUN chmod a+x /var/scripts/*
-# Copy custom config to PHP config dir.
-COPY 08/php-config/custom.ini "$PHP_INI_DIR/conf.d/custom"
-
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data \
     && groupmod -g 1000 www-data
-
-CMD /var/scripts/run.sh

@@ -1,6 +1,0 @@
-# Ignore files/folders in same directory as the .gitignore file...
-/*
-
-# ...except some files
-!.gitignore
-!README.md

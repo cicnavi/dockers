@@ -3,4 +3,4 @@
 
 # ...except some files
 !.gitignore
-!*.conf-example
+!custom.ini

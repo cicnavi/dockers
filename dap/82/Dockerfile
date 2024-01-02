@@ -1,4 +1,4 @@
-FROM php:8.1-apache
+FROM php:8.2-apache
 
 # Use the default development php.ini configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
@@ -6,6 +6,7 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 # Setup bare-minimum extra extensions for Laravel & others
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& apt-get install -y --no-install-recommends \
+#	    apt-utils \
 		libmemcached-dev  \
 		libfreetype6-dev \
 		libxml2-dev \

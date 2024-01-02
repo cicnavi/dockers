@@ -1,0 +1,12 @@
+
+# Ignore...
+/*
+
+# ...except
+!.htaccess
+!index.php
+!*.png
+!*.ico
+!site.webmanifest
+
+!.gitignore

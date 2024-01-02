@@ -45,6 +45,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 		libonig-dev \
 		libldap2-dev \
 		mariadb-client \
+        openssh-client \
 	&& docker-php-ext-install -j$(nproc) bcmath zip pdo pdo_mysql mysqli opcache mbstring curl json xml bz2 soap gmp \
 	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
 	&& docker-php-ext-install -j$(nproc) gd \
@@ -66,6 +67,7 @@ ENV COMPOSER_HOME /composer
 ENV PATH $PATH:/composer/vendor/bin
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
+RUN chmod -R 777 /composer
 
 # Set allowed plugins
 RUN composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
@@ -119,14 +121,6 @@ RUN echo "" >> /etc/apache2/apache2.conf \
 # Set timezone
 RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
 
-# Copy some required files to container
-COPY shared/scripts /var/scripts
-RUN chmod a+x /var/scripts/*
-# Copy custom config to PHP config dir.
-COPY 74/php-config/custom.ini "$PHP_INI_DIR/conf.d/"
-
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data \
     && groupmod -g 1000 www-data
-
-CMD /var/scripts/run.sh
