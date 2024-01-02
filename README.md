@@ -1,13 +1,13 @@
 
 # cicnavi Docker Containers
 
-These are LAMP (Debian linux, Apache, PHP - DAP) oriented containers which I use in my day-to-day development work.
+These are LAMP (Debian linux, Apache, PHP) oriented containers which I use in my day-to-day development work.
 Main purpose is to have development environment with different versions of PHP together with tools like
 composer, phpunit, psalm, phpcs... In addition, typical services like databases are also available.
 
 ## Available containers
 
-- DAP (Debian Apache PHP) containers follow the PHP version releases and have their names set corresponding the
+- DAP (Debian Apache PHP) containers which follow the PHP version releases and have their names set corresponding the
   PHP version, for example:
     - 74.dap.test - PHP v7.4.*
     - 82.dap.test - PHP v8.2.*
@@ -16,15 +16,11 @@ composer, phpunit, psalm, phpcs... In addition, typical services like databases 
 - Database containers like MySQL, OpenLDAP, Redis...
 
 ## Run containers
-Clone the repo, for example:
+
+Clone the repo and enter the directory, for example:
 
 ```shell
 git clone https://github.com/cicnavi/dockers.git dockers
-```
-
-Go to 'dockers' directory:
-
-```shell
 cd dockers
 ```
 
@@ -63,26 +59,21 @@ containers, like MySQL, Redis...
 
 #### Configuring Apache and PHP
 Inside 'dap' folder, there is one folder for each PHP version. For each PHP version we can set custom Apache and PHP 
-configuration. 
-
-Apache configuration can be set by creating files ending in '.conf' in 'apache-config' folder.
-In 'dap' folder you will find 'shared/src' folder, which can be used to share apache config across all containers.
-
-Custom PHP configuration can be set in 'ini' files in 'php-config' folder.
+configuration. You'll also find 'shared/src' folder, which can be used to share config across all containers.
 
 #### Setting source files for your web application
-In each PHP version folder you will find folders 'src' and 'html'.
 
-Folder 'src' can contain source files which should be available to only one specific container.
-You can use 'shared/src' folder to make it available to all containers 
+My approach of making source files available in containers is to mount my 'projects' folder which holds sources of
+all applications that I'm working on. If you look at the compose.yml file, you'll note that I'm mounting
+'~/projects:/var/www/projects' in all containers, so all my apps are available in /var/www/projects folder.
 
-The 'html' folder should contain files which will be served publicly by the Apache web server. 
+Next, the 'html' folder should contain files which will be served publicly by the Apache web server. 
 By default, in 'html' folder you'll find 'index.php' file which will dump PHP information.
 
-When you put application source files in 'src' folder, you can enter the 'bash' in the container, and create a symlink 
-to the application source which will be served publicly (the same applies to 'shared' folder).
+When you make your application source files available for example in '/var/www/projects' folder, you can enter the
+'bash' in the container, and create a symlink to the application source which will be served publicly.
 
-For example, let's enter the 'bash' in '81.dap.test' container:
+For example, let's enter the 'bash' in 08.dap.test container:
 
 ```shell
 docker exec -it 08.dap.test bash
@@ -92,14 +83,19 @@ By default, you'll be positioned in '/var/www/html' folder. Here you can create 
 you wish to be served by Apache:
 
 ```shell
-ln -s ../src/some-php-app/public some-php-app
+ln -s ../projects/some-php-app/public some-php-app
 ```
 
 This will create a symbolic link 'some-php-app' which will point to 'public' folder of our PHP application. Of course, 
 you should adjust symlinks to suit your needs.
 
+In order to share all symlinks between containers, simply mount the default html folder in all containers like
+I mount './mounts/html:/var/www/html' in compose.yml.
+
 #### Running web application
-If you look at the 'compose.yml' file, you'll note that nginx reverse proxy is used in front of all DAP containers.
+
+Note that nginx reverse proxy is used in front of all DAP containers by default.
+
 Each container has several virtual hosts appointed which can then be used to access specific container. By default,
 everything is configured around a wildcard domain '*.localhost.markoivancic.form.hr', which has a real certificate
 available, so you can use https scheme out of the box.
@@ -112,6 +108,7 @@ https://08-dap.localhost.markoivancic.form.hr/some-php-app/.
 If you only enter https://08-dap.localhost.markoivancic.form.hr, you'll get PHP info dump.
 
 #### Specifying container host names and forwarding ports
+
 You can edit your operating system hosts file and add host names for each container.
 For example, you can add the following entries:
 
