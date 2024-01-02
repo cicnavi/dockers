@@ -2,6 +2,7 @@ services:
     nginx-proxy:
         restart: always
         image: nginxproxy/nginx-proxy:latest
+        container_name: nginx-proxy.dap.test
         ports:
             - 80:80
             - 443:443

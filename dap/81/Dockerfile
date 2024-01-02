@@ -6,7 +6,6 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 # Setup bare-minimum extra extensions for Laravel & others
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& apt-get install -y --no-install-recommends \
-#	    apt-utils \
 		libmemcached-dev  \
 		libfreetype6-dev \
 		libxml2-dev \
@@ -67,7 +66,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
                 ldap \
                 mysqli \
                 opcache \
-                pcntl \
                 pdo_mysql \
                 pdo_pgsql \
                 pgsql \
@@ -88,14 +86,16 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	&& docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
 	&& docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
 	&& docker-php-ext-configure pcntl --enable-pcntl \
-	&& docker-php-ext-install -j$(nproc) $phpModules \
-	&& pecl install xdebug-3.2.1 \
+	&& docker-php-ext-install -j$(nproc) $phpModules
+
+RUN pecl channel-update pecl.php.net \
+	&& pecl install apcu-5.1.23 \
+	&& pecl install igbinary-3.2.15 \
 	&& pecl install memcached-3.2.0 \
-	&& pecl install redis-5.3.7 \
-	&& pecl install apcu-5.1.22 \
-	&& pecl install igbinary-3.2.14 \
-	&& pecl install mongodb-1.15.1 \
-	&& docker-php-ext-enable xdebug memcached redis apcu igbinary mongodb \
+	&& pecl install mongodb-1.17.2 \
+	&& pecl install redis-6.0.2 \
+	&& pecl install xdebug-3.3.1 \
+	&& docker-php-ext-enable apcu igbinary memcached mongodb redis xdebug \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -173,14 +173,6 @@ RUN echo "" >> /etc/apache2/apache2.conf \
 # Set timezone
 RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
 
-# Copy some required files to container
-COPY shared/scripts /var/scripts
-RUN chmod a+x /var/scripts/*
-# Copy custom config to PHP config dir.
-COPY 81/php-config/custom.ini "$PHP_INI_DIR/conf.d/"
-
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data \
     && groupmod -g 1000 www-data
-
-CMD /var/scripts/run.sh

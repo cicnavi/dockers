@@ -1,25 +1,19 @@
-# TODO
-* install ssh client on all containers and suggest mount point for ssk keys
-* do not fail if wget can not download certs for markoivancic.from.hr 
-* add write rights for /composer cache path
-* move cert download in nginx using script
 
 # cicnavi Docker Containers
 
-These are LAMP (Linux, Apache, MySQL, PHP) oriented containers which I use in my day-to-day 
-development work. Main purpose is to have development environment with different
-versions of PHP together with tools like composer, phpunit, psalm, phpcs... In addition,
-typical services like databases are also available.
+These are LAMP (Debian linux, Apache, PHP - DAP) oriented containers which I use in my day-to-day development work.
+Main purpose is to have development environment with different versions of PHP together with tools like
+composer, phpunit, psalm, phpcs... In addition, typical services like databases are also available.
 
 ## Available containers
 
-- DAP (Debian Apache PHP) - follow the PHP version releases and have their names set corresponding the
+- DAP (Debian Apache PHP) containers follow the PHP version releases and have their names set corresponding the
   PHP version, for example:
     - 74.dap.test - PHP v7.4.*
     - 82.dap.test - PHP v8.2.*
     - ...
     - 08.dap.test - Latest PHP v8.*
-- Databases, like MySQL, OpenLDAP, Redis...
+- Database containers like MySQL, OpenLDAP, Redis...
 
 ## Run containers
 Clone the repo, for example:
@@ -108,7 +102,7 @@ you should adjust symlinks to suit your needs.
 If you look at the 'compose.yml' file, you'll note that nginx reverse proxy is used in front of all DAP containers.
 Each container has several virtual hosts appointed which can then be used to access specific container. By default,
 everything is configured around a wildcard domain '*.localhost.markoivancic.form.hr', which has a real certificate
-available.
+available, so you can use https scheme out of the box.
 
 For example, container 08.dap.test has a virtual host '08-dap.localhost.markoivancic.from.hr' set. That means we can
 access our web application on a URL:
@@ -118,7 +112,7 @@ https://08-dap.localhost.markoivancic.form.hr/some-php-app/.
 If you only enter https://08-dap.localhost.markoivancic.form.hr, you'll get PHP info dump.
 
 #### Specifying container host names and forwarding ports
-You can edit your hosts file and add host names for each container.
+You can edit your operating system hosts file and add host names for each container.
 For example, you can add the following entries:
 
 ```
@@ -157,3 +151,6 @@ containers (you can edit that file to suit your needs if you wish):
 ```shell
 docker-compose up -d
 ```
+
+# TODO
+* Consider automatic cert download for localhost.markoivancic.from.hr on nginx proxy using script and specific build

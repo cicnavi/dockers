@@ -121,14 +121,6 @@ RUN echo "" >> /etc/apache2/apache2.conf \
 # Set timezone
 RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
 
-# Copy some required files to container
-COPY shared/scripts /var/scripts
-RUN chmod a+x /var/scripts/*
-# Copy custom config to PHP config dir.
-COPY 74/php-config/custom.ini "$PHP_INI_DIR/conf.d/"
-
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data \
     && groupmod -g 1000 www-data
-
-CMD /var/scripts/run.sh
