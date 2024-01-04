@@ -115,25 +115,25 @@ services:
             - mysql.dap.test
 
     mysql.dap.test:
-        restart: 'no'
+        restart: unless-stopped
         extends:
             service: mysql.dap.test
             file: mysql/compose.yml
 
     mysql8.dap.test:
-        restart: 'no'
+        restart: unless-stopped
         extends:
             service: mysql8.dap.test
             file: mysql/compose.yml
 
     openldap:
-        restart: 'no'
+        restart: unless-stopped
         extends:
             service: openldap
             file: openldap/compose.yml
 
     phpldapadmin:
-        restart: 'no'
+        restart: unless-stopped
         extends:
             service: phpldapadmin
             file: openldap/compose.yml
@@ -141,7 +141,7 @@ services:
             - openldap
 
     redis7:
-        restart: 'no'
+        restart: unless-stopped
         extends:
             service: redis7
             file: redis7/compose.yml
