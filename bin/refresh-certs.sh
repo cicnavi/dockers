@@ -16,6 +16,5 @@ echo "Cert destination directory: $cert_destination"
 # Download existing certificates and give them expected file name
 # localhost.markoivancic.from.hr source
 source="https://certs.markoivancic.from.hr/localhost.markoivancic.from.hr/"
-wget "${source}fullchain.pem" -O "${cert_destination_dir}localhost.markoivancic.from.hr.fullchain.pem"
-wget "${source}cer.pem" -O "${cert_destination_dir}localhost.markoivancic.from.hr.crt"
+wget "${source}fullchain.pem" -O "${cert_destination_dir}localhost.markoivancic.from.hr.crt"
 wget "${source}key.pem" -O "${cert_destination_dir}localhost.markoivancic.from.hr.key"
