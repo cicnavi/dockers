@@ -11,6 +11,14 @@ services:
         volumes:
             - ./nginx-proxy/certs:/etc/nginx/certs
             - /var/run/docker.sock:/tmp/docker.sock:ro
+        networks:
+            default:
+                aliases:
+                    - localhost.markoivancic.from.hr
+                    - 08-dap.localhost.markoivancic.from.hr
+                    - 82-dap.localhost.markoivancic.from.hr
+                    - 81-dap.localhost.markoivancic.from.hr
+                    - 74-dap.localhost.markoivancic.from.hr
 
     08.dap.test:
         image: cicnavi/dap:08
