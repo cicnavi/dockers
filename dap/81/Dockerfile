@@ -166,6 +166,11 @@ RUN echo "" >> /etc/apache2/apache2.conf \
 	&& echo "IncludeOptional config-from-host/*.conf" >> /etc/apache2/apache2.conf \
 	&& echo "IncludeOptional shared-config-from-host/*.conf" >> /etc/apache2/apache2.conf
 
+# Leave Authorization header available
+RUN echo "" >> /etc/apache2/apache2.conf \
+    && echo "# Leave Authorization header available." >> /etc/apache2/apache2.conf \
+    && echo "SetEnvIf Authorization \"(.*)\" HTTP_AUTHORIZATION=\$1" >> /etc/apache2/apache2.conf
+
 # Set permissions for Apache user and group
 #RUN chown -R www-data:www-data /var/www/html \
 #	&& chown -R www-data:www-data /var/www/src
