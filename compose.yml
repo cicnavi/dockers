@@ -24,6 +24,7 @@ services:
     08.dap.test:
         image: cicnavi/dap:08
         container_name: 08.dap.test
+        hostname: 08.dap.test
         restart: unless-stopped
         expose:
             - 80
@@ -54,6 +55,7 @@ services:
     82.dap.test:
         image: cicnavi/dap:82
         container_name: 82.dap.test
+        hostname: 82.dap.test
         restart: unless-stopped
         expose:
             - 80
@@ -78,6 +80,7 @@ services:
     81.dap.test:
         image: cicnavi/dap:81
         container_name: 81.dap.test
+        hostname: 81.dap.test
         restart: unless-stopped
         expose:
             - 80
@@ -102,6 +105,7 @@ services:
     74.dap.test:
         image: cicnavi/dap:74
         container_name: 74.dap.test
+        hostname: 74.dap.test
         restart: unless-stopped
         expose:
             - 80
