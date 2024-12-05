@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IMAGE=${1:-74}
+IMAGE=${1:-08}
 USER_GROUP=${2:-0}
 
 CMD=${3:-bash}

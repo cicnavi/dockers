@@ -1,4 +1,4 @@
-FROM php:8-apache
+FROM php:8.3-apache
 
 # Use the default development php.ini configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
@@ -54,92 +54,23 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
 		librabbitmq4 \
         mariadb-client \
         openssh-client \
-        libenchant-2-dev \
-        libedit-dev \
-        libsodium-dev
-
-#RUN docker-php-ext-install -j$(nproc) bcmath
-#RUN docker-php-ext-install -j$(nproc) bz2
-#RUN docker-php-ext-install -j$(nproc) calendar
-##RUN docker-php-ext-install -j$(nproc) ctype
-##RUN docker-php-ext-install -j$(nproc) curl
-#RUN docker-php-ext-install -j$(nproc) dba
-#RUN docker-php-ext-install -j$(nproc) dl_test
-##RUN docker-php-ext-install -j$(nproc) dom
-#RUN docker-php-ext-install -j$(nproc) enchant
-#RUN docker-php-ext-install -j$(nproc) exif
-#RUN docker-php-ext-install -j$(nproc) ffi
-##RUN docker-php-ext-install -j$(nproc) fileinfo
-##RUN docker-php-ext-install -j$(nproc) filter
-##RUN docker-php-ext-install -j$(nproc) ftp
-#RUN docker-php-ext-install -j$(nproc) gd
-#RUN docker-php-ext-install -j$(nproc) gettext
-#RUN docker-php-ext-install -j$(nproc) gmp
-##RUN docker-php-ext-install -j$(nproc) hash
-##RUN docker-php-ext-install -j$(nproc) iconv
-#RUN docker-php-ext-install -j$(nproc) intl
-##RUN docker-php-ext-install -j$(nproc) json
-#RUN docker-php-ext-install -j$(nproc) ldap
-##RUN docker-php-ext-install -j$(nproc) mbstring
-#RUN docker-php-ext-install -j$(nproc) mysqli
-##RUN docker-php-ext-install -j$(nproc) odbc
-#RUN docker-php-ext-install -j$(nproc) opcache
-#RUN docker-php-ext-install -j$(nproc) pcntl
-##RUN docker-php-ext-install -j$(nproc) pdo
-##RUN docker-php-ext-install -j$(nproc) pdo_dblib
-##RUN docker-php-ext-install -j$(nproc) pdo_firebird
-#RUN docker-php-ext-install -j$(nproc) pdo_mysql
-##RUN docker-php-ext-install -j$(nproc) pdo_odbc
-#RUN docker-php-ext-install -j$(nproc) pdo_pgsql
-##RUN docker-php-ext-install -j$(nproc) pdo_sqlite
-#RUN docker-php-ext-install -j$(nproc) pgsql
-##RUN docker-php-ext-install -j$(nproc) phar
-##RUN docker-php-ext-install -j$(nproc) posix
-##RUN docker-php-ext-install -j$(nproc) random
-##RUN docker-php-ext-install -j$(nproc) readline
-##RUN docker-php-ext-install -j$(nproc) reflection
-##RUN docker-php-ext-install -j$(nproc) session
-#RUN docker-php-ext-install -j$(nproc) shmop
-##RUN docker-php-ext-install -j$(nproc) simplexml
-#RUN docker-php-ext-install -j$(nproc) snmp
-#RUN docker-php-ext-install -j$(nproc) soap
-#RUN docker-php-ext-install -j$(nproc) sockets
-##RUN docker-php-ext-install -j$(nproc) sodium
-##RUN docker-php-ext-install -j$(nproc) spl
-##RUN docker-php-ext-install -j$(nproc) standard
-#RUN docker-php-ext-install -j$(nproc) sysvmsg
-#RUN docker-php-ext-install -j$(nproc) sysvsem
-#RUN docker-php-ext-install -j$(nproc) sysvshm
-#RUN docker-php-ext-install -j$(nproc) tidy
-##RUN docker-php-ext-install -j$(nproc) tokenizer
-##RUN docker-php-ext-install -j$(nproc) xml
-##RUN docker-php-ext-install -j$(nproc) xmlreader
-##RUN docker-php-ext-install -j$(nproc) xmlwriter
-#RUN docker-php-ext-install -j$(nproc) xsl
-##RUN docker-php-ext-install -j$(nproc) zend_test
-#RUN docker-php-ext-install -j$(nproc) zip
-
-RUN phpModules=" \
+    && phpModules=" \
                 bcmath \
                 bz2 \
                 calendar \
-                dba \
-                dl_test \
-                enchant \
                 exif \
-                ffi \
                 gd \
                 gettext \
                 gmp \
+                imap \
                 intl \
                 ldap \
                 mysqli \
                 opcache \
-                pcntl \
-                pdo \
                 pdo_mysql \
                 pdo_pgsql \
                 pgsql \
+                pspell \
                 shmop \
                 snmp \
                 soap \
@@ -150,9 +81,11 @@ RUN phpModules=" \
                 tidy \
                 xsl \
                 zip \
+                pcntl \
             " \
 	&& docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp \
 	&& docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
+	&& docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
 	&& docker-php-ext-configure pcntl --enable-pcntl \
 	&& docker-php-ext-install -j$(nproc) $phpModules
 
@@ -164,8 +97,7 @@ RUN pecl channel-update pecl.php.net \
 	&& pecl install pcov \
 	&& pecl install redis \
     && pecl install xdebug \
-    && pecl install imap \
-	&& docker-php-ext-enable apcu igbinary memcached mongodb pcov redis xdebug imap \
+	&& docker-php-ext-enable xdebug igbinary memcached redis apcu mongodb pcov \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -202,7 +134,18 @@ RUN composer global require "phpstan/phpstan=*"
 RUN composer global require "vimeo/psalm=*"
 RUN composer global require "phpunit/phpunit=*"
 
-## Sonar Scanner installation
+# Local PHP Security Checker
+# https://github.com/fabpot/local-php-security-checker/releases/download/v2.0.6/local-php-security-checker_2.0.6_linux_amd64
+ENV PATH $PATH:/opt/local-php-security-checker
+RUN rm -f /opt/local-php-security-checker/* \
+    && mkdir -p /opt/local-php-security-checker \
+    && wget https://github.com/fabpot/local-php-security-checker/releases/download/v2.0.6/local-php-security-checker_2.0.6_linux_amd64 -O /opt/local-php-security-checker/local-php-security-checker \
+    && chmod a+x /opt/local-php-security-checker/local-php-security-checker \
+    && touch /etc/profile.d/local-php-security-checker.sh \
+    # Make available for login shells
+    && printf '%s\n' '#/bin/bash' 'export PATH="$PATH:/opt/local-php-security-checker"' > /etc/profile.d/local-php-security-checker.sh
+
+# Sonar Scanner installation
 #ENV PATH $PATH:/opt/sonar-scanner/bin
 #ENV SONAR_SCANNER_VERSION "4.8.0.2856-linux"
 #ENV SONAR_SCANNER_FILENAME "sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"

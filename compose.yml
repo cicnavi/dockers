@@ -52,6 +52,32 @@ services:
         depends_on:
             - mysql.dap.test
 
+    83.dap.test:
+        image: cicnavi/dap:83
+        container_name: 83.dap.test
+        hostname: 83.dap.test
+        restart: unless-stopped
+        expose:
+            - 80
+            - 443
+        user: ${CONTAINER_USER_ID}
+        environment:
+            VIRTUAL_HOST: >-
+                83.dap.test,
+                *.83.dap.test,
+                83-dap.localhost.markoivancic.from.hr,
+                ~^.+-83-dap\.localhost\.markoivancic\.from\.hr$
+            CERT_NAME: localhost.markoivancic.from.hr
+            HTTPS_METHOD: noredirect
+        volumes:
+            - ~/projects:/var/www/projects # Directory for all apps, change local path as needed.
+            - ./mounts/html:/var/www/html # Public directory, change local path as needed.
+            - ./dap/83/apache-config:/etc/apache2/config-from-host # Apache configuration to include.
+            - ./dap/83/php-config:/usr/local/etc/php/conf.d/from-host # PHP configuration to include.
+        depends_on:
+            - mysql.dap.test
+
+
     82.dap.test:
         image: cicnavi/dap:82
         container_name: 82.dap.test

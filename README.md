@@ -142,11 +142,11 @@ Once you've cloned this repo, go to 'openldap' directory:
 cd dockers/openldap
 ```
 
-Here you'll find a 'docker-compose.yml' file. This means you can use 'docker-compose' command to easily run defined 
+Here you'll find a 'compose.yml' file. This means you can use 'docker compose' command to easily run defined 
 containers (you can edit that file to suit your needs if you wish):
 
 ```shell
-docker-compose up -d
+docker compose up -d
 ```
 
 # TODO

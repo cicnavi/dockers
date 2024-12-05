@@ -11,7 +11,7 @@ cert_destination_dir="$parent_dir/nginx-proxy/certs/"
 
 echo "Script directory: $script_dir"
 echo "Parent directory: $parent_dir"
-echo "Cert destination directory: $cert_destination"
+echo "Cert destination directory: $cert_destination_dir"
 
 # Download existing certificates and give them expected file name
 # localhost.markoivancic.from.hr source
