@@ -184,3 +184,29 @@ services:
         extends:
             service: redis7
             file: redis7/compose.yml
+
+#    keycloak:
+#        image: quay.io/keycloak/keycloak:latest
+#        container_name: keycloak
+#        ports:
+#            - "8010:8080"
+#        expose:
+#            - 8080
+#        environment:
+#            KEYCLOAK_ADMIN: "admin"
+#            KEYCLOAK_ADMIN_PASSWORD: "admin"
+#            KC_DB: mysql
+#            KC_DB_USERNAME: apps
+#            KC_DB_PASSWORD: apps
+#            KC_DB_URL_DATABASE: keycloak
+#            KC_DB_URL_HOST: mysql.dap.test
+#            KC_DB_URL_PORT: 3306
+#        command: start-dev
+
+    memcached:
+        image: memcached:latest
+        container_name: memcached
+        hostname: memcached
+        restart: unless-stopped
+        expose:
+            - 11211
