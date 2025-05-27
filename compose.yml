@@ -99,7 +99,7 @@ services:
             - ~/projects:/var/www/projects # Directory for all apps, change local path as needed.
             - ./mounts/html:/var/www/html # Public directory, change local path as needed.
             - ./dap/82/apache-config:/etc/apache2/config-from-host # Apache configuration to include.
-            - ./dap/82/php-config:/usr/local/etc/php/conf.d/from-host # PHP configuration to include.
+            - ./dap/82/php-config/custom.ini:/usr/local/etc/php/conf.d/custom.ini # PHP configuration to include.
         depends_on:
             - mysql.dap.test
 
@@ -210,3 +210,18 @@ services:
         restart: unless-stopped
         expose:
             - 11211
+
+    mailcatcher.dap.test:
+        image: dockage/mailcatcher:latest
+        container_name: mailcatcher.dap.test
+        hostname: mailcatcher.dap.test
+        expose:
+            - 1080
+            - 1025
+        user: ${CONTAINER_USER_ID}
+        environment:
+            VIRTUAL_HOST: >-
+                mailcatcher.localhost.markoivancic.from.hr
+            VIRTUAL_PORT: 1080
+            CERT_NAME: mailcatcher.localhost.markoivancic.from.hr
+            HTTPS_METHOD: noredirect
