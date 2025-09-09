@@ -103,9 +103,9 @@ available, so you can use https scheme out of the box.
 For example, container 08.dap.test has a virtual host '08-dap.localhost.markoivancic.from.hr' set. That means we can
 access our web application on a URL:
 
-https://08-dap.localhost.markoivancic.form.hr/some-php-app/.
+https://08-dap.localhost.markoivancic.from.hr/some-php-app/.
 
-If you only enter https://08-dap.localhost.markoivancic.form.hr, you'll get PHP info dump.
+If you only enter https://08-dap.localhost.markoivancic.from.hr, you'll get PHP info dump.
 
 #### Specifying container host names and forwarding ports
 
