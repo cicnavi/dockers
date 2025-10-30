@@ -141,6 +141,96 @@ This way you can enter URL for the container like this:
 
 http://08.dap.test
 
+#### Mutual TLS (mTLS)
+
+mTLS is enabled by default using features from
+[nginx-proxy](https://github.com/nginx-proxy/nginx-proxy/wiki/mTLS-client-side-certificate-authentication)
+
+PKI has been initialized using the `bin/init-pki.sh` script. In essence, this
+runs the following command:
+
+```shell
+docker run --rm -it \
+ -u "$(id -u)" \
+ -v ./data:/data \
+ theohbrothers/docker-easyrsa:latest init-pki
+```
+
+As you can see, we have blank PKI structure in `data/pki` folder, ready to be
+used to generate new key pairs.
+
+Next, a CA certificate is generated in `data/pki/ca.crt` and a key pair is
+generated in `data/pki/private/ca.key`, using the `bin/generate-ca.sh` script.
+In essence, this runs the following commands:
+
+```shell
+docker run --rm -it \
+ -u "$(id -u)" \
+ -v ./data:/data \
+ theohbrothers/docker-easyrsa:latest build-ca nopass
+ 
+cp -f ./data/pki/ca.crt ./nginx-proxy/certs
+```
+
+Next, a Certificate Revocation List (CRL) is generated in
+`data/pki/crl.pem` using the `bin/generate-crl.sh` script. In essence, this
+runs the following command:
+
+```shell
+docker run --rm -it \
+ -u "$(id -u)" \
+ -e EASYRSA_CRL_DAYS=3650 \
+ -v ./data:/data \
+ theohbrothers/docker-easyrsa:latest gen-crl
+ 
+cp -f ./data/pki/crl.pem ./nginx-proxy/certs/ca.crl.pem
+```
+
+Finally, a client certificate is generated in `data/pki/issued/dap.crt` and a
+key pair is generated in `data/pki/private/dap.key`, using the
+`bin/generate-cert.sh cert_name` script. In essence, this runs the following
+command:
+
+```shell
+docker run --rm -it \
+ -u "$(id -u)" \
+ -e EASYRSA_CERT_EXPIRE=3650 \
+ -v ./data:/data \
+ theohbrothers/docker-easyrsa:latest build-client-full cert_name nopass
+```
+
+You can use the `data/pki/issued/dap.crt` for your client application.
+Alternatively, you can use the above command to generate a new cert and a key
+pair for your application (adjust the `cert_name` accordingly).
+
+To revoke particular cert, run the `bin/revoke-cert.sh cert_name reason` script.
+
+So, the `nginx-proxy` container is configured to use `ca.crt` (root CA), 
+and `ca.crl.pem` (CRL), for client configuration. To make client authentication
+optional, the following label has to be added to the underlying container
+(sample from `compose.yml`):
+
+```yaml
+# ...other content omitted
+        labels:
+            com.github.nginx-proxy.nginx-proxy.ssl_verify_client: "optional"
+```
+
+So, if the client authenticates, the `nginx` will proxy the content of the
+client certificate to the underlying container by using the
+`$ssl_client_escaped_cert` variable in the HTTP header
+`SSL_CLIENT_ESCAPED_CERT`. Check `nginx-proxy/config/conf.d/proxy.conf` and
+`dap/shared/apache-config/10-promote-proxy-client-cert.conf` on how this is
+done.
+
+Sample HTTP request using the already generated `data/pki/private/dap` client
+key and certificate pair, with `curl`:
+
+```shell
+curl --key data/pki/private/dap.key \
+     --cert data/pki/issued/dap.crt \
+     https://82-dap.localhost.markoivancic.from.hr/
+```
 
 ### OpenLDAP
 

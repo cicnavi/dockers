@@ -11,6 +11,9 @@ services:
             SSL_POLICY: Mozilla-Modern
         volumes:
             - ./nginx-proxy/certs:/etc/nginx/certs
+            - ./nginx-proxy/config/vhost.d:/etc/nginx/vhost.d
+            - ./nginx-proxy/config/conf.d/proxy.conf:/etc/nginx/conf.d/proxy.conf
+            - ./nginx-proxy/logs:/var/log/nginx
             - /var/run/docker.sock:/tmp/docker.sock:ro
         networks:
             default:
@@ -41,13 +44,15 @@ services:
                 ~^.+-08-dap\.localhost\.markoivancic\.from\.hr$
             CERT_NAME: localhost.markoivancic.from.hr
             HTTPS_METHOD: noredirect
+        labels:
+            com.github.nginx-proxy.nginx-proxy.ssl_verify_client: "optional"
         volumes:
             #- ~/.ssh:~/.ssh # SSH keys for easy deployment inside the container
             - ~/projects:/var/www/projects # Directory for all apps, change local path as needed.
             - ./mounts/html:/var/www/html # Public directory, change local path as needed.
             - ./dap/08/apache-config:/etc/apache2/config-from-host # Apache configuration to include.
             - ./dap/08/php-config:/usr/local/etc/php/conf.d/from-host # PHP configuration to include.
-            #- ./dap/shared/apache-config:/etc/apache2/shared-config-from-host # Shared Apache configuration to include.
+            - ./dap/shared/apache-config:/etc/apache2/shared-config-from-host # Shared Apache configuration to include.
             #- ./dap/shared/data:/var/data # Shared directory between containers.
         depends_on:
             - mysql.dap.test
@@ -69,11 +74,14 @@ services:
                 ~^.+-83-dap\.localhost\.markoivancic\.from\.hr$
             CERT_NAME: localhost.markoivancic.from.hr
             HTTPS_METHOD: noredirect
+        labels:
+            com.github.nginx-proxy.nginx-proxy.ssl_verify_client: "optional"
         volumes:
             - ~/projects:/var/www/projects # Directory for all apps, change local path as needed.
             - ./mounts/html:/var/www/html # Public directory, change local path as needed.
             - ./dap/83/apache-config:/etc/apache2/config-from-host # Apache configuration to include.
             - ./dap/83/php-config:/usr/local/etc/php/conf.d/from-host # PHP configuration to include.
+            - ./dap/shared/apache-config:/etc/apache2/shared-config-from-host # Shared Apache configuration to include.
         depends_on:
             - mysql.dap.test
 
@@ -95,11 +103,14 @@ services:
                 ~^.+-82-dap\.localhost\.markoivancic\.from\.hr$
             CERT_NAME: localhost.markoivancic.from.hr
             HTTPS_METHOD: noredirect
+        labels:
+            com.github.nginx-proxy.nginx-proxy.ssl_verify_client: "optional"
         volumes:
             - ~/projects:/var/www/projects # Directory for all apps, change local path as needed.
             - ./mounts/html:/var/www/html # Public directory, change local path as needed.
             - ./dap/82/apache-config:/etc/apache2/config-from-host # Apache configuration to include.
             - ./dap/82/php-config/custom.ini:/usr/local/etc/php/conf.d/custom.ini # PHP configuration to include.
+            - ./dap/shared/apache-config:/etc/apache2/shared-config-from-host # Shared Apache configuration to include.
         depends_on:
             - mysql.dap.test
 
@@ -120,11 +131,14 @@ services:
                 ~^.+-81-dap\.localhost\.markoivancic\.from\.hr$
             CERT_NAME: localhost.markoivancic.from.hr
             HTTPS_METHOD: noredirect
+        labels:
+            com.github.nginx-proxy.nginx-proxy.ssl_verify_client: "optional"
         volumes:
             - ~/projects:/var/www/projects # Directory for all apps, change local path as needed.
             - ./mounts/html:/var/www/html # Public directory, change local path as needed.
             - ./dap/81/apache-config:/etc/apache2/config-from-host # Apache configuration to include.
             - ./dap/81/php-config:/usr/local/etc/php/conf.d/from-host # PHP configuration to include.
+            - ./dap/shared/apache-config:/etc/apache2/shared-config-from-host # Shared Apache configuration to include.
         depends_on:
             - mysql.dap.test
 
@@ -145,11 +159,14 @@ services:
                 ~^.+-74-dap\.localhost\.markoivancic\.from\.hr$
             CERT_NAME: localhost.markoivancic.from.hr
             HTTPS_METHOD: noredirect
+        labels:
+            com.github.nginx-proxy.nginx-proxy.ssl_verify_client: "optional"
         volumes:
             - ~/projects:/var/www/projects # Directory for all apps, change local path as needed.
             - ./mounts/html:/var/www/html # Public directory, change local path as needed.
             - ./dap/74/apache-config:/etc/apache2/config-from-host # Apache configuration to include.
             - ./dap/74/php-config:/usr/local/etc/php/conf.d/from-host # PHP configuration to include.
+            - ./dap/shared/apache-config:/etc/apache2/shared-config-from-host # Shared Apache configuration to include.
         depends_on:
             - mysql.dap.test
 
