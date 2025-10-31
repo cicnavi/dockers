@@ -4,3 +4,4 @@
 
 
 !.gitignore
+!10-promote-proxy-client-cert.conf
