@@ -219,7 +219,9 @@ optional, the following label has to be added to the underlying container
 So, if the client authenticates, the `nginx` will proxy the content of the
 client certificate to the underlying container by using the
 `$ssl_client_escaped_cert` variable in the HTTP header
-`SSL_CLIENT_ESCAPED_CERT`. Check `nginx-proxy/config/conf.d/proxy.conf` and
+`X-Ssl-Client-Escaped-Cert`, which will be made available as
+`SSL_CLIENT_ESCAPED_CERT` Apache environment variable. Check
+`nginx-proxy/config/conf.d/proxy.conf` and
 `dap/shared/apache-config/10-promote-proxy-client-cert.conf` on how this is
 done.
 
