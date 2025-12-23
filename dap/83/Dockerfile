@@ -33,7 +33,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
 		libldap2-dev \
 		unixodbc-dev \
 		libsnmp-dev \
-		libpcre3-dev \
+		libpcre2-dev \
 		libtidy-dev \
 		libaspell-dev \
 		tar \
@@ -47,7 +47,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
 		libldap2-dev \
 		libxslt-dev \
 		libwebp-dev \
-		libc-client-dev \
 		libkrb5-dev \
 		libpspell-dev \
 		librabbitmq-dev \
@@ -62,7 +61,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
                 gd \
                 gettext \
                 gmp \
-                imap \
                 intl \
                 ldap \
                 mysqli \
@@ -85,7 +83,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
             " \
 	&& docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp \
 	&& docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
-	&& docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
 	&& docker-php-ext-configure pcntl --enable-pcntl \
 	&& docker-php-ext-install -j$(nproc) $phpModules
 
@@ -116,6 +113,7 @@ RUN mkdir -p $PHP_INI_DIR/conf.d/custom \
 ENV COMPOSER_HOME /composer
 ENV PATH $PATH:/composer/vendor/bin
 ENV COMPOSER_ALLOW_SUPERUSER 1
+RUN mkdir -p /composer/cache && chmod -R 777 /composer
 ENV PHP_INI_SCAN_DIR ":$PHP_INI_DIR/conf.d/custom:$PHP_INI_DIR/conf.d/from-host"
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 RUN chmod -R 777 /composer
@@ -126,7 +124,6 @@ RUN composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffe
 # Install code quality tools
 RUN composer global require "squizlabs/php_codesniffer=*"
 RUN composer global require "pheromone/phpcs-security-audit=*"
-RUN composer global require "phpcompatibility/php-compatibility=*"
 RUN composer global require "dealerdirect/phpcodesniffer-composer-installer=*"
 RUN composer global require "friendsofphp/php-cs-fixer=*"
 RUN composer global require "phpmd/phpmd=*"
@@ -142,7 +139,7 @@ RUN rm -f /opt/local-php-security-checker/* \
     && wget https://github.com/fabpot/local-php-security-checker/releases/download/v2.0.6/local-php-security-checker_2.0.6_linux_amd64 -O /opt/local-php-security-checker/local-php-security-checker \
     && chmod a+x /opt/local-php-security-checker/local-php-security-checker \
     && touch /etc/profile.d/local-php-security-checker.sh \
-    # Make available for login shells
+    # Make available for login shells \
     && printf '%s\n' '#/bin/bash' 'export PATH="$PATH:/opt/local-php-security-checker"' > /etc/profile.d/local-php-security-checker.sh
 
 # Sonar Scanner installation
@@ -186,4 +183,5 @@ RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
 
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data \
-    && groupmod -g 1000 www-data
+    && groupmod -g 1000 www-data \
+    && chown -R www-data:www-data /composer

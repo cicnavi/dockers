@@ -66,6 +66,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 ENV COMPOSER_HOME /composer
 ENV PATH $PATH:/composer/vendor/bin
 ENV COMPOSER_ALLOW_SUPERUSER 1
+RUN mkdir -p /composer/cache && chmod -R 777 /composer
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 RUN chmod -R 777 /composer
 
@@ -75,7 +76,6 @@ RUN composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffe
 # Install code quality tools
 RUN composer global require "squizlabs/php_codesniffer=*"
 RUN composer global require "pheromone/phpcs-security-audit=*"
-RUN composer global require "phpcompatibility/php-compatibility=*"
 RUN composer global require "dealerdirect/phpcodesniffer-composer-installer=*"
 RUN composer global require "friendsofphp/php-cs-fixer=*"
 RUN composer global require "phpmd/phpmd=*"
@@ -128,4 +128,5 @@ RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
 
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data \
-    && groupmod -g 1000 www-data
+    && groupmod -g 1000 www-data \
+    && chown -R www-data:www-data /composer

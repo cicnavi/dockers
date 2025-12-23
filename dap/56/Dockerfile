@@ -45,6 +45,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
 ENV COMPOSER_HOME /composer
 ENV PATH /composer/vendor/bin:$PATH
 ENV COMPOSER_ALLOW_SUPERUSER 1
+RUN mkdir -p /composer/cache && chmod -R 777 /composer
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
 # Install code quality tools
