@@ -1,4 +1,4 @@
-FROM php:8.1-apache
+FROM php:8.5.2-apache
 
 # Use the default development php.ini configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
