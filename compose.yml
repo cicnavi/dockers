@@ -57,6 +57,36 @@ services:
         depends_on:
             - mysql.dap.test
 
+    84.dap.test:
+        image: cicnavi/dap:84
+        container_name: 84.dap.test
+        hostname: 84.dap.test
+        restart: unless-stopped
+        expose:
+            - 80
+            - 443
+        user: ${CONTAINER_USER_ID}
+        environment:
+            VIRTUAL_HOST: >-
+                84.dap.test,
+                *.84.dap.test,
+                84-dap.localhost.markoivancic.from.hr,
+                ~^.+-84-dap\.localhost\.markoivancic\.from\.hr$
+            CERT_NAME: localhost.markoivancic.from.hr
+            HTTPS_METHOD: noredirect
+        labels:
+            com.github.nginx-proxy.nginx-proxy.ssl_verify_client: "optional"
+        volumes:
+            #- ~/.ssh:~/.ssh # SSH keys for easy deployment inside the container
+            - ~/projects:/var/www/projects # Directory for all apps, change local path as needed.
+            - ./mounts/html:/var/www/html # Public directory, change local path as needed.
+            - ./dap/84/apache-config:/etc/apache2/config-from-host # Apache configuration to include.
+            - ./dap/84/php-config:/usr/local/etc/php/conf.d/from-host # PHP configuration to include.
+            - ./dap/shared/apache-config:/etc/apache2/shared-config-from-host # Shared Apache configuration to include.
+            #- ./dap/shared/data:/var/data # Shared directory between containers.
+        depends_on:
+            - mysql.dap.test
+
     83.dap.test:
         image: cicnavi/dap:83
         container_name: 83.dap.test
