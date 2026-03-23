@@ -1,7 +1,5 @@
 FROM php:8.5-apache
 
-ARG XDEBUG=1
-
 # Use the default development php.ini configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
@@ -12,7 +10,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
 		libmemcached-dev  \
 		libfreetype6-dev \
 		libxml2-dev \
-		libjpeg-dev \
+		libjpeg62-turbo-dev \
 		libpng-dev \
 		zlib1g-dev \
 		libzip-dev \
@@ -25,6 +23,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
 		zip \
 		libmcrypt-dev \
 		libvpx-dev \
+		libjpeg-dev \
+		libpng-dev \
 		bzip2 \
 		wget \
 		libexpat1-dev \
@@ -44,6 +44,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
 		libxrender1 \
 		unzip \
 		libonig-dev \
+		libldap2-dev \
 		libxslt-dev \
 		libwebp-dev \
 		libkrb5-dev \
@@ -56,11 +57,42 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
         libedit-dev \
         libsodium-dev
 
+#RUN docker-php-ext-install -j$(nproc) bcmath
+#RUN docker-php-ext-install -j$(nproc) bz2
+#RUN docker-php-ext-install -j$(nproc) calendar
+#RUN docker-php-ext-install -j$(nproc) dba
+#RUN docker-php-ext-install -j$(nproc) dl_test
+#RUN docker-php-ext-install -j$(nproc) enchant
+#RUN docker-php-ext-install -j$(nproc) exif
+#RUN docker-php-ext-install -j$(nproc) ffi
+#RUN docker-php-ext-install -j$(nproc) gd
+#RUN docker-php-ext-install -j$(nproc) gettext
+#RUN docker-php-ext-install -j$(nproc) gmp
+#RUN docker-php-ext-install -j$(nproc) intl
+#RUN docker-php-ext-install -j$(nproc) ldap
+#RUN docker-php-ext-install -j$(nproc) mysqli
+#RUN docker-php-ext-install -j$(nproc) pcntl
+#RUN docker-php-ext-install -j$(nproc) pdo
+#RUN docker-php-ext-install -j$(nproc) pdo_mysql
+#RUN docker-php-ext-install -j$(nproc) pdo_pgsql
+#RUN docker-php-ext-install -j$(nproc) pgsql
+#RUN docker-php-ext-install -j$(nproc) shmop
+#RUN docker-php-ext-install -j$(nproc) snmp
+#RUN docker-php-ext-install -j$(nproc) soap
+#RUN docker-php-ext-install -j$(nproc) sockets
+#RUN docker-php-ext-install -j$(nproc) sysvmsg
+#RUN docker-php-ext-install -j$(nproc) sysvsem
+#RUN docker-php-ext-install -j$(nproc) sysvshm
+#RUN docker-php-ext-install -j$(nproc) tidy
+#RUN docker-php-ext-install -j$(nproc) xsl
+#RUN docker-php-ext-install -j$(nproc) zip
+
 RUN phpModules=" \
                 bcmath \
                 bz2 \
                 calendar \
                 dba \
+                dl_test \
                 enchant \
                 exif \
                 ffi \
@@ -103,6 +135,10 @@ RUN pecl channel-update pecl.php.net \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# https://stackoverflow.com/questions/9520914/installing-amqp-through-pecl
+#RUN pecl install amqp-1.6.0 \
+#	&& docker-php-ext-enable amqp \
+
 # Create required custom directories
 RUN mkdir -p $PHP_INI_DIR/conf.d/custom \
     && mkdir -p $PHP_INI_DIR/conf.d/from-host \
@@ -114,22 +150,36 @@ RUN mkdir -p $PHP_INI_DIR/conf.d/custom \
 ENV COMPOSER_HOME=/composer
 ENV PATH=$PATH:/composer/vendor/bin
 ENV COMPOSER_ALLOW_SUPERUSER=1
-RUN mkdir -p /composer/cache && chmod 755 /composer
+RUN mkdir -p /composer/cache && chmod -R 777 /composer
 ENV PHP_INI_SCAN_DIR=":$PHP_INI_DIR/conf.d/custom:$PHP_INI_DIR/conf.d/from-host"
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
-RUN chmod 755 /composer
+RUN chmod -R 777 /composer
 
-# Set allowed plugins and install code quality tools
-RUN composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true \
-    && composer global require \
-        squizlabs/php_codesniffer=* \
-        pheromone/phpcs-security-audit=* \
-        dealerdirect/phpcodesniffer-composer-installer=* \
-        friendsofphp/php-cs-fixer=* \
-        phpmd/phpmd=* \
-        phpstan/phpstan=* \
-        vimeo/psalm=* \
-        phpunit/phpunit=*
+# Set allowed plugins
+RUN composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+
+# Install code quality tools
+RUN composer global require "squizlabs/php_codesniffer=*"
+RUN composer global require "pheromone/phpcs-security-audit=*"
+RUN composer global require "dealerdirect/phpcodesniffer-composer-installer=*"
+RUN composer global require "friendsofphp/php-cs-fixer=*"
+RUN composer global require "phpmd/phpmd=*"
+RUN composer global require "phpstan/phpstan=*"
+RUN composer global require "vimeo/psalm=*"
+RUN composer global require "phpunit/phpunit=*"
+
+## Sonar Scanner installation
+#ENV PATH=$PATH:/opt/sonar-scanner/bin
+#ENV SONAR_SCANNER_VERSION="4.8.0.2856-linux"
+#ENV SONAR_SCANNER_FILENAME="sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
+#ENV SONAR_SCANNER_DL_URL="https://binaries.sonarsource.com/Distribution/sonar-scanner-cli"
+#RUN rm -f /opt/${SONAR_SCANNER_FILENAME} \
+#    && wget ${SONAR_SCANNER_DL_URL}/${SONAR_SCANNER_FILENAME} -O /opt/${SONAR_SCANNER_FILENAME} \
+#    && unzip /opt/${SONAR_SCANNER_FILENAME} -d /opt \
+#    && ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION} /opt/sonar-scanner \
+#    && touch /etc/profile.d/sonar-scanner.sh \
+#    # Make available for login shells
+#    && printf '%s\n' '#/bin/bash' 'export PATH="$PATH:/opt/sonar-scanner/bin"' > /etc/profile.d/sonar-scanner.sh
 
 # Enable Apache mod_rewrite.
 RUN a2enmod rewrite ssl headers proxy proxy_http
@@ -150,6 +200,10 @@ RUN echo "" >> /etc/apache2/apache2.conf \
     && echo "# Leave Authorization header available." >> /etc/apache2/apache2.conf \
     && echo "SetEnvIf Authorization \"(.*)\" HTTP_AUTHORIZATION=\$1" >> /etc/apache2/apache2.conf
 
+# Set permissions for Apache user and group
+#RUN chown -R www-data:www-data /var/www/html \
+#	&& chown -R www-data:www-data /var/www/src
+
 # Set timezone
 RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
 
@@ -157,8 +211,3 @@ RUN ln -sf /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
 RUN usermod -u 1000 www-data \
     && groupmod -g 1000 www-data \
     && chown -R www-data:www-data /composer
-
-WORKDIR /var/www/html
-
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost/ || exit 1
