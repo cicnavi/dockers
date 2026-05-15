@@ -234,6 +234,41 @@ curl --key data/pki/private/dap.key \
      https://82-dap.localhost.markoivancic.from.hr/
 ```
 
+### MySQL
+
+To connect to the MySQL container, you can use the `mysql` client from your
+host machine, or you can enter the `bash` in the specific container and use
+the `mysql` client from there.
+
+For example, to enter the `bash` in the `82.dap.test` container and connect
+to the MySQL container, you can run the following commands:
+
+```shell
+docker exec -it 82.dap.test bash
+mysql -h mysql.dap.test -u root --skip-ssl
+```
+
+Alternatively, using a online command:
+
+```shell
+docker exec -it 82.dap.test mysql -h mysql.dap.test -u root --skip-ssl
+```
+
+
+To connect to the MySQL container from the MySQL container, you can use the
+following command:
+
+```shell
+docker exec -it mysql.dap.test
+mysql
+```
+
+Alternatively, using a online command:
+
+```shell
+docker exec -it mysql.dap.test mysql
+```
+
 ### OpenLDAP
 
 OpenLDAP containers are simply based on `osixia/openldap` which is available

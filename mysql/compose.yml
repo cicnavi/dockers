@@ -23,7 +23,7 @@ services:
     environment:
       # We can run MySQL without root password, or we can set it here.
       # Comment out one of the next two lines:
-      #    MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      MYSQL_ROOT_PASSWORD: badabing
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      #MYSQL_ROOT_PASSWORD: badabing
     volumes:
       - ~/volumes/mysql8:/var/lib/mysql
